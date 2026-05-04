@@ -1,0 +1,54 @@
+{
+  "stage": 4,
+  "stage_name": "Gemini Ranking (Base)",
+  "parameters": {
+    "method": "Gemini API",
+    "top_k": 5,
+    "rate_limit": "13/min"
+  },
+  "cache_stats": {
+    "hits": 0,
+    "misses": 50,
+    "api_requests": 1
+  },
+  "input_count": 50,
+  "output_count": 5,
+  "retention_rate": 0.1,
+  "score_stats": {
+    "min": 5,
+    "max": 10,
+    "mean": 9.9
+  },
+  "ranked_resumes": [
+    {
+      "rank": 1,
+      "id": 0,
+      "gemini_score": 10,
+      "reasoning": "[MOCK] Based on resume length"
+    },
+    {
+      "rank": 2,
+      "id": 1,
+      "gemini_score": 10,
+      "reasoning": "[MOCK] Based on resume length"
+    },
+    {
+      "rank": 3,
+      "id": 2,
+      "gemini_score": 10,
+      "reasoning": "[MOCK] Based on resume length"
+    },
+    {
+      "rank": 4,
+      "id": 3,
+      "gemini_score": 10,
+      "reasoning": "[MOCK] Based on resume length"
+    },
+    {
+      "rank": 5,
+      "id": 4,
+      "gemini_score": 10,
+      "reasoning": "[MOCK] Based on resume length"
+    }
+  ]
+}

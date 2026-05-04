@@ -1,0 +1,46 @@
+{
+  "evaluation_summary": {
+    "timestamp": "2026-05-03 22:36:10",
+    "sample_size": 11,
+    "total_time_seconds": 3.464564800262451,
+    "ground_truth_select_rate": 0.45454545454545453
+  },
+  "method_comparison": {
+    "baseline_tfidf": {
+      "accuracy": 0.4,
+      "method": "TF-IDF",
+      "confidence": "Low (keyword-based)"
+    },
+    "embedding": {
+      "accuracy": 0.6,
+      "method": "Embeddings",
+      "confidence": "Medium (semantic)"
+    },
+    "gemini_base": {
+      "accuracy": 0.4,
+      "method": "Gemini LLM",
+      "confidence": "High (LLM-based)"
+    },
+    "ensemble_improved": {
+      "accuracy": 0.4,
+      "method": "Ensemble",
+      "confidence": "Very High (multi-method)"
+    }
+  },
+  "improvement": {
+    "best_single_method_accuracy": 0.6,
+    "ensemble_accuracy": 0.4,
+    "improvement_percentage": -19.999999999999996
+  },
+  "correlations": {
+    "gemini_vs_tfidf": NaN,
+    "gemini_vs_embedding": NaN,
+    "tfidf_vs_embedding": 0.6708100036104504
+  },
+  "anomalies_detected": 0,
+  "rate_limiting": {
+    "api_requests": 11,
+    "cache_hits": 0,
+    "rate_limit_per_minute": 13
+  }
+}

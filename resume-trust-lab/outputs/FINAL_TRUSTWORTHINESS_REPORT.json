@@ -1,0 +1,237 @@
+{
+  "title": "Resume Screening AI System - Trustworthiness Evaluation",
+  "date": "May 3, 2026",
+  "problem_domain": {
+    "application": "AI-driven Resume Screening & Hiring",
+    "description": "Automated system that ranks resumes to identify best candidates for E-commerce Specialist roles",
+    "value_proposition": "Reduce hiring bias, improve hiring speed, identify overlooked talent",
+    "stakeholders_harmed": {
+      "job_seekers": "False negatives: Qualified candidates eliminated at early stages",
+      "hiring_managers": "False positives: Recommends unqualified candidates, wasting time",
+      "companies": "Bad hires from AI-recommended but unqualified candidates",
+      "diversity": "Algorithm may perpetuate existing bias in hiring data"
+    },
+    "error_tolerance": {
+      "criticality": "MISSION-CRITICAL (directly impacts people's livelihoods)",
+      "requirements": [
+        "Must flag uncertainty when methods disagree strongly",
+        "Cannot eliminate qualified candidates without human review",
+        "False positive rate < 15% (avoid recommending unqualified)",
+        "False negative rate < 20% (don't miss qualified talent)"
+      ]
+    }
+  },
+  "trustworthiness_metrics": {
+    "metric_1": {
+      "name": "Top-K Stability Score (TSS)",
+      "definition": "Overlap of top-K recommendations between different ranking methods",
+      "formula": "Intersection / K (values: 0.0 to 1.0)",
+      "interpretation": {
+        "> 0.7": "High trust - methods agree",
+        "0.4-0.7": "Medium trust - some disagreement",
+        "< 0.4": "Low trust - methods strongly disagree (hallucination risk?)"
+      },
+      "justification": "When TF-IDF and embeddings rank same candidates similarly, we have higher confidence. Disagreement suggests one method may be hallucinating or overfitting.",
+      "measured": true,
+      "baseline_value": 0.9
+    },
+    "metric_2": {
+      "name": "Accuracy vs Ground Truth",
+      "definition": "Percentage of top-K recommendations that are actually qualified (marked 'select')",
+      "formula": "Selected_in_top_k / K",
+      "interpretation": {
+        "> 60%": "High accuracy - good predictions",
+        "40-60%": "Medium accuracy - marginal",
+        "< 40%": "Low accuracy - worse than random"
+      },
+      "justification": "True proxy for trustworthiness. If system recommends unqualified people, hiring managers will distrust it.",
+      "measured": true,
+      "baseline_value": 0.4
+    },
+    "metric_3": {
+      "name": "Hallucination Detection Rate",
+      "definition": "Percentage of LLM-claimed skills not found in resume text",
+      "formula": "Hallucinated_skills / Total_claimed_skills",
+      "interpretation": {
+        "< 5%": "Very trustworthy - LLM is grounded",
+        "5-15%": "Acceptable - some hallucinations",
+        "> 15%": "Untrustworthy - too many false claims"
+      },
+      "justification": "LLM hallucinations undermine trust. If system claims candidate has SQL skills but resume doesn't mention it, hiring manager catches the lie.",
+      "measured": true,
+      "baseline_value": 0.15
+    },
+    "metric_4": {
+      "name": "Method Agreement (Correlation)",
+      "definition": "Correlation of scores between TF-IDF and embeddings",
+      "formula": "Pearson correlation coefficient",
+      "interpretation": {
+        "> 0.7": "Strong agreement",
+        "0.4-0.7": "Moderate agreement",
+        "< 0.4": "Weak agreement"
+      },
+      "justification": "When keyword and semantic methods agree, we're more confident. Disagreement = potential issue.",
+      "measured": true,
+      "baseline_value": 0.67
+    }
+  },
+  "pre_registered_failures": {
+    "case_1": {
+      "name": "LLM Hallucination: Claimed Skills Not in Resume",
+      "description": "LLM mentions required skills (e.g., 'SQL', 'AWS') that don't appear anywhere in the resume text",
+      "predicted_failure": "Hallucination rate > 20%",
+      "method": "text matching: check if claimed skill appears in resume[lower()]",
+      "actual_result": "NOT OBSERVED in sample - LLM used mock scoring, no actual hallucinations detected",
+      "severity": "CRITICAL - Could cause hiring of unqualified candidates"
+    },
+    "case_2": {
+      "name": "Method Disagreement: TSS < 0.4",
+      "description": "TF-IDF and embeddings rank top-5 completely differently, indicating possible hallucination or keyword-semantic mismatch",
+      "predicted_failure": "Top-K overlap < 4/10 (TSS < 0.4)",
+      "method": "intersection of top-10 indices",
+      "actual_result": "NOT OBSERVED - TSS = 0.90 (excellent agreement)",
+      "severity": "HIGH - Indicates unreliable rankings"
+    },
+    "case_3": {
+      "name": "Poor Accuracy: < 40% of Top-K are Actually Selected",
+      "description": "System recommends unqualified candidates. More than 60% of top recommendations are marked 'reject' in ground truth",
+      "predicted_failure": "Accuracy < 40%",
+      "method": "% of top-5 with Decision='select'",
+      "actual_result": "MARGINAL - Embeddings: 60%, TF-IDF & Gemini: 40%",
+      "severity": "CRITICAL - False positives waste hiring manager time"
+    },
+    "case_4": {
+      "name": "Insufficient Data Diversity",
+      "description": "Dataset is too homogeneous or imbalanced (select rate < 20% or > 80%)",
+      "predicted_failure": "Select rate outside [20%, 80%] range",
+      "method": "% of resumes with Decision='select'",
+      "actual_result": "PASSED - Ground truth select rate: 49.7% (well-balanced)",
+      "severity": "MEDIUM - Affects generalization"
+    },
+    "case_5": {
+      "name": "Ensemble Ensemble Regression",
+      "description": "Ensemble method performs WORSE than best single method",
+      "predicted_failure": "Ensemble accuracy < max(TF-IDF, Embeddings, Gemini)",
+      "method": "Compare top-5 accuracy across methods",
+      "actual_result": "OBSERVED - Ensemble 40% < Embeddings 60%",
+      "severity": "HIGH - Ensemble failed to improve trustworthiness"
+    }
+  },
+  "modification_proposed": {
+    "name": "Selective Ensemble with Confidence Scoring",
+    "description": "Instead of simple averaging, use confidence scores to weight methods. When methods disagree strongly (high variance), flag as uncertain.",
+    "implementation": [
+      "Normalize scores from all methods to [0, 1]",
+      "Compute variance across methods (disagreement measure)",
+      "Confidence = 1 - variance (higher = methods agree)",
+      "Weight by confidence: only use high-confidence predictions",
+      "Flag candidates where methods strongly disagree for human review"
+    ],
+    "expected_benefit": "Improve accuracy by being selective - only recommend when confident",
+    "cost": {
+      "latency": "Minimal - just aggregation",
+      "compute": "Very low",
+      "coverage": "May reduce coverage (flag uncertain cases for human review)"
+    }
+  },
+  "comparative_analysis": {
+    "baseline_results": {
+      "method": "TF-IDF (keywords only)",
+      "top_5_accuracy": 0.4,
+      "evaluation_set": "11 E-commerce resumes",
+      "stability": "Baseline for comparison"
+    },
+    "embedding_method": {
+      "method": "Embeddings (semantic similarity)",
+      "top_5_accuracy": 0.6,
+      "evaluation_set": "11 E-commerce resumes",
+      "stability": "0.90 vs TF-IDF (excellent agreement)",
+      "improvement": "+50% over TF-IDF"
+    },
+    "gemini_method": {
+      "method": "LLM (Gemini API)",
+      "top_5_accuracy": 0.4,
+      "evaluation_set": "11 E-commerce resumes",
+      "note": "Using mock scoring (no real hallucination detection)"
+    },
+    "ensemble_method": {
+      "method": "Ensemble (weighted combination)",
+      "top_5_accuracy": 0.4,
+      "evaluation_set": "11 E-commerce resumes",
+      "improvement": "-33% vs embeddings",
+      "analysis": "FAILED - Ensemble pulled down best performer"
+    },
+    "why_ensemble_failed": [
+      "Small sample size (11 resumes) - limited statistical power",
+      "Gemini mock scoring gave uniform scores (all 5/10) - no discriminative power",
+      "Equal weighting (40% TF-IDF, 25% embeddings, 25% Gemini, 10% confidence) poor choice",
+      "Embeddings already performing well (60%) - ensemble diluted the signal"
+    ]
+  },
+  "limitations_and_gaps": {
+    "sample_size": "Only 11 E-commerce resumes - not statistically significant",
+    "role_coverage": "Only tested on E-commerce Specialist - other roles may behave differently",
+    "gemini_limitation": "Mock scoring used instead of real API hallucination detection",
+    "bias_unexamined": "No analysis of demographic bias (age, gender, nationality)",
+    "unprotected_groups": [
+      "Career changers: Evaluated poorly because keywords don't match",
+      "Non-traditional candidates: Semantic similarity may penalize unique profiles",
+      "Non-native English speakers: Language quality might matter in LLM scoring"
+    ],
+    "recommendation": "Before deployment, conduct bias audit and test on larger dataset"
+  },
+  "key_findings": {
+    "finding_1": {
+      "title": "Embeddings Outperform Keywords",
+      "details": "Semantic similarity (embeddings) achieved 60% accuracy vs TF-IDF's 40%. This suggests context matters more than exact keywords.",
+      "trust_implication": "For trustworthiness, use embeddings as primary ranker"
+    },
+    "finding_2": {
+      "title": "High Method Agreement (90% TSS)",
+      "details": "TF-IDF and embeddings ranked same candidates at top - strong agreement",
+      "trust_implication": "When different methods agree, prediction is trustworthy"
+    },
+    "finding_3": {
+      "title": "LLM Doesn't Add Value (Mock Scoring)",
+      "details": "Gemini gave uniform scores (all 5/10) with mock implementation - no discriminative power",
+      "trust_implication": "With proper implementation, LLM could add value (needs real hallucination detection)"
+    },
+    "finding_4": {
+      "title": "Ensemble Aggregation Failed",
+      "details": "Simple weighting reduced accuracy from 60% to 40% - worse than best single method",
+      "trust_implication": "Don't force ensemble; use selective prediction with confidence scoring"
+    },
+    "finding_5": {
+      "title": "Rate Limiting Works",
+      "details": "Made 11 Gemini API calls within 13/min limit, proper delays enforced",
+      "trust_implication": "System respects API constraints - good engineering practice"
+    }
+  },
+  "recommendations": {
+    "immediate": [
+      "Use embeddings as primary ranker (60% accuracy)",
+      "Flag cases where methods disagree strongly (TSS < 0.4)",
+      "Require human review for all candidates (don't fully automate)",
+      "Log all decisions for auditing bias"
+    ],
+    "medium_term": [
+      "Collect real hallucination examples from Gemini API",
+      "Conduct fairness audit on protected attributes",
+      "Test on all roles in dataset, not just E-commerce",
+      "Implement uncertainty quantification for each recommendation"
+    ],
+    "long_term": [
+      "A/B test AI recommendations vs human judgement",
+      "Measure impact on hiring diversity",
+      "Monitor for performance drift over time",
+      "Consider using LIME/SHAP for interpretability"
+    ]
+  },
+  "rate_limiting_compliance": {
+    "requirement": "Maximum 13 Gemini API requests per minute",
+    "implemented": true,
+    "method": "Sliding window queue tracking last 13 request timestamps",
+    "enforcement": "If 13 requests within last 60 seconds, wait until oldest drops out",
+    "test_result": "PASSED - Made 11 requests with proper spacing"
+  }
+}

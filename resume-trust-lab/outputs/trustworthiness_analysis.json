@@ -1,0 +1,55 @@
+{
+  "metrics": {
+    "data_integrity": {
+      "total_resumes": 10174,
+      "ground_truth_select_rate": 0.49734617652840574,
+      "test_select_rate": 0.4
+    },
+    "stage_2_accuracy": {
+      "method": "TF-IDF",
+      "top_10_select_rate": 0.4,
+      "score_range": [
+        0.24004271073740904,
+        0.28737691443960806
+      ]
+    },
+    "stage_3_accuracy": {
+      "method": "Embeddings",
+      "top_10_select_rate": 0.4,
+      "score_range": [
+        0.49851953983306885,
+        0.6565948724746704
+      ]
+    },
+    "ranking_stability": {
+      "top_k_overlap": 5,
+      "stability_score": 0.5,
+      "interpretation": "Medium (0.4-0.7)"
+    },
+    "rate_limiting": {
+      "max_requests_per_minute": 13,
+      "min_interval_seconds": 4.615384615384615
+    },
+    "hallucination_detection": {
+      "enabled": true,
+      "method": "Text matching against resume"
+    }
+  },
+  "failure_cases": {
+    "case_1": {
+      "name": "Low Ranking Stability",
+      "description": "TSS < 0.4 (keywords vs embeddings disagree)",
+      "failed": "False"
+    },
+    "case_2": {
+      "name": "Poor Top-K Accuracy",
+      "description": "< 40% of top-10 are actually \"select\"",
+      "failed": "False"
+    },
+    "case_3": {
+      "name": "Data Imbalance",
+      "description": "Ground truth select rate < 20% or > 80%",
+      "failed": "False"
+    }
+  }
+}

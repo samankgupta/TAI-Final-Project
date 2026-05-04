@@ -1,0 +1,268 @@
+{
+  "stage": 2,
+  "stage_name": "Baseline Ranking (TF-IDF)",
+  "parameters": {
+    "method": "TF-IDF Cosine Similarity",
+    "top_k": 50
+  },
+  "input_count": 100,
+  "output_count": 50,
+  "retention_rate": 0.5,
+  "score_stats": {
+    "min": 0.02776373486259342,
+    "max": 0.24160311967367418,
+    "mean": 0.111217847648122
+  },
+  "ranked_resumes": [
+    {
+      "rank": 1,
+      "id": 0,
+      "baseline_score": 0.24160311967367418
+    },
+    {
+      "rank": 2,
+      "id": 1,
+      "baseline_score": 0.2150493568220118
+    },
+    {
+      "rank": 3,
+      "id": 2,
+      "baseline_score": 0.20373860142769584
+    },
+    {
+      "rank": 4,
+      "id": 3,
+      "baseline_score": 0.19465785867957525
+    },
+    {
+      "rank": 5,
+      "id": 4,
+      "baseline_score": 0.1928236168546215
+    },
+    {
+      "rank": 6,
+      "id": 5,
+      "baseline_score": 0.19005658769664246
+    },
+    {
+      "rank": 7,
+      "id": 6,
+      "baseline_score": 0.1823273569880677
+    },
+    {
+      "rank": 8,
+      "id": 7,
+      "baseline_score": 0.18072343864936163
+    },
+    {
+      "rank": 9,
+      "id": 8,
+      "baseline_score": 0.17959221494775993
+    },
+    {
+      "rank": 10,
+      "id": 9,
+      "baseline_score": 0.17796913318375282
+    },
+    {
+      "rank": 11,
+      "id": 10,
+      "baseline_score": 0.17729696277826068
+    },
+    {
+      "rank": 12,
+      "id": 11,
+      "baseline_score": 0.16774538151624063
+    },
+    {
+      "rank": 13,
+      "id": 12,
+      "baseline_score": 0.15894071122362227
+    },
+    {
+      "rank": 14,
+      "id": 13,
+      "baseline_score": 0.1586895396264771
+    },
+    {
+      "rank": 15,
+      "id": 14,
+      "baseline_score": 0.15822510568546713
+    },
+    {
+      "rank": 16,
+      "id": 15,
+      "baseline_score": 0.15545565406345152
+    },
+    {
+      "rank": 17,
+      "id": 16,
+      "baseline_score": 0.15383195216704498
+    },
+    {
+      "rank": 18,
+      "id": 17,
+      "baseline_score": 0.1509087554493442
+    },
+    {
+      "rank": 19,
+      "id": 18,
+      "baseline_score": 0.1494446455260071
+    },
+    {
+      "rank": 20,
+      "id": 19,
+      "baseline_score": 0.14539256203916348
+    },
+    {
+      "rank": 21,
+      "id": 20,
+      "baseline_score": 0.14475417587577416
+    },
+    {
+      "rank": 22,
+      "id": 21,
+      "baseline_score": 0.14469611979803607
+    },
+    {
+      "rank": 23,
+      "id": 22,
+      "baseline_score": 0.14400176390061944
+    },
+    {
+      "rank": 24,
+      "id": 23,
+      "baseline_score": 0.14236550171476675
+    },
+    {
+      "rank": 25,
+      "id": 24,
+      "baseline_score": 0.1404573904010946
+    },
+    {
+      "rank": 26,
+      "id": 25,
+      "baseline_score": 0.13853609481011803
+    },
+    {
+      "rank": 27,
+      "id": 26,
+      "baseline_score": 0.13717790170165425
+    },
+    {
+      "rank": 28,
+      "id": 27,
+      "baseline_score": 0.13690690930831076
+    },
+    {
+      "rank": 29,
+      "id": 28,
+      "baseline_score": 0.13665281262321427
+    },
+    {
+      "rank": 30,
+      "id": 29,
+      "baseline_score": 0.13426545225089226
+    },
+    {
+      "rank": 31,
+      "id": 30,
+      "baseline_score": 0.1317193107825325
+    },
+    {
+      "rank": 32,
+      "id": 31,
+      "baseline_score": 0.13008093701204607
+    },
+    {
+      "rank": 33,
+      "id": 32,
+      "baseline_score": 0.1278741887812865
+    },
+    {
+      "rank": 34,
+      "id": 33,
+      "baseline_score": 0.12509902976324833
+    },
+    {
+      "rank": 35,
+      "id": 34,
+      "baseline_score": 0.12420733706980895
+    },
+    {
+      "rank": 36,
+      "id": 35,
+      "baseline_score": 0.12307770627265968
+    },
+    {
+      "rank": 37,
+      "id": 36,
+      "baseline_score": 0.12262807086688869
+    },
+    {
+      "rank": 38,
+      "id": 37,
+      "baseline_score": 0.12026104704031657
+    },
+    {
+      "rank": 39,
+      "id": 38,
+      "baseline_score": 0.1194206281556489
+    },
+    {
+      "rank": 40,
+      "id": 39,
+      "baseline_score": 0.11821098727113807
+    },
+    {
+      "rank": 41,
+      "id": 40,
+      "baseline_score": 0.11780657613793763
+    },
+    {
+      "rank": 42,
+      "id": 41,
+      "baseline_score": 0.11724950861210115
+    },
+    {
+      "rank": 43,
+      "id": 42,
+      "baseline_score": 0.11684513276986516
+    },
+    {
+      "rank": 44,
+      "id": 43,
+      "baseline_score": 0.11565058400065686
+    },
+    {
+      "rank": 45,
+      "id": 44,
+      "baseline_score": 0.11523478057730947
+    },
+    {
+      "rank": 46,
+      "id": 45,
+      "baseline_score": 0.11418206640200375
+    },
+    {
+      "rank": 47,
+      "id": 46,
+      "baseline_score": 0.11106423468219238
+    },
+    {
+      "rank": 48,
+      "id": 47,
+      "baseline_score": 0.11098161727503703
+    },
+    {
+      "rank": 49,
+      "id": 48,
+      "baseline_score": 0.10975337600785832
+    },
+    {
+      "rank": 50,
+      "id": 49,
+      "baseline_score": 0.10582085674487135
+    }
+  ]
+}

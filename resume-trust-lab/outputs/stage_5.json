@@ -1,0 +1,56 @@
+{
+  "stage": 5,
+  "stage_name": "Improved Gemini (With Grounding)",
+  "parameters": {
+    "method": "Gemini with Grounding",
+    "top_k": 5,
+    "rate_limit": "13/min"
+  },
+  "cache_stats": {
+    "hits": 0,
+    "misses": 4,
+    "api_requests": 1
+  },
+  "hallucination_stats": {
+    "detected": 0,
+    "avg_rate": 0.0
+  },
+  "input_count": 4,
+  "output_count": 4,
+  "retention_rate": 1.0,
+  "score_stats": {
+    "min": 5,
+    "max": 10,
+    "mean": 8.75
+  },
+  "ranked_resumes": [
+    {
+      "rank": 1,
+      "id": 0,
+      "improved_score": 10,
+      "hallucination_rate": 0.0,
+      "reasoning": "[MOCK] Score based on cleaned resume quality proxy."
+    },
+    {
+      "rank": 2,
+      "id": 1,
+      "improved_score": 10,
+      "hallucination_rate": 0.0,
+      "reasoning": "[MOCK] Score based on cleaned resume quality proxy."
+    },
+    {
+      "rank": 3,
+      "id": 2,
+      "improved_score": 10,
+      "hallucination_rate": 0.0,
+      "reasoning": "[MOCK] Score based on cleaned resume quality proxy."
+    },
+    {
+      "rank": 4,
+      "id": 3,
+      "improved_score": 5,
+      "hallucination_rate": 0.0,
+      "reasoning": "[MOCK] Gemini model unavailable; using fallback score."
+    }
+  ]
+}

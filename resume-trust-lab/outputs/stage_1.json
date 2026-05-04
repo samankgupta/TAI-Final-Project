@@ -1,0 +1,520 @@
+{
+  "stage": 1,
+  "stage_name": "Role Filtering",
+  "parameters": {
+    "role": "Software Engineer",
+    "fuzzy_match": false,
+    "max_role_matches": 100
+  },
+  "input_count": 100,
+  "output_count": 100,
+  "retention_rate": 1.0,
+  "resumes": [
+    {
+      "id": 0,
+      "role": "Software Engineer",
+      "resume_preview": "David Rivera Software Engineer Contact Information: * Phone: (555) 123-4567 * Email: david.rivera@email.com * LinkedIn: linkedin.com/in/davidriverasoftware * GitHub: github.com/davidriverasoftware Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designin"
+    },
+    {
+      "id": 1,
+      "role": "Software Engineer",
+      "resume_preview": "Brian Hicks Software Engineer Contact Information: * Email: brian.hicks@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/brianhickssoftware * GitHub: github.com/brianhicks Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing,"
+    },
+    {
+      "id": 2,
+      "role": "Software Engineer",
+      "resume_preview": "Jeffrey Stephenson Software Engineer Contact Information: * Email: jeffrey.stephenson@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/jeffrey-stephenson * GitHub: github.com/jeffrey-stephenson Professional Summary: Highly motivated and detail-oriented Software Engineer with 5+ years of"
+    },
+    {
+      "id": 3,
+      "role": "Software Engineer",
+      "resume_preview": "Tammy Hamilton Contact Information: * Phone: (555) 123-4567 * Email: tammyhamilton@email.com * LinkedIn: linkedin.com/in/tammyhamilton * GitHub: github.com/tammyhamilton Professional Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing,"
+    },
+    {
+      "id": 4,
+      "role": "Software Engineer",
+      "resume_preview": "Gregory Saunders Contact Information: * Phone: (123) 456-7890 * Email: gregory.saunder@gmail.com * LinkedIn: linkedin.com/in/gregorysaunder Professional Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploying scalable softwa"
+    },
+    {
+      "id": 5,
+      "role": "Software Engineer",
+      "resume_preview": "Here's a sample professional resume for Erin Stout: Erin Stout Software Engineer Contact Information: * Phone: (555) 123-4567 * Email: erinstout@email.com * LinkedIn: linkedin.com/in/erinstout * GitHub: github.com/erinstout Summary: Highly motivated and detail-oriented software engineer with 5+ year"
+    },
+    {
+      "id": 6,
+      "role": "Software Engineer",
+      "resume_preview": "Dillon Crawford Software Engineer Contact Information: * Phone: (123) 456-7890 * Email: dillon.crawford@email.com * LinkedIn: linkedin.com/in/dilloncrawford * GitHub: github.com/dilloncrawford Summary: Highly motivated and experienced software engineer with a strong background in Java, Python, and a"
+    },
+    {
+      "id": 7,
+      "role": "Software Engineer",
+      "resume_preview": "John Morgan Contact Information: * Phone: (123) 456-7890 * Email: john.morgan@email.com * LinkedIn: linkedin.com/in/johnmorgan * GitHub: github.com/johnmorgan Summary: Highly skilled software engineer with 5+ years of experience in designing, developing, and deploying large-scale software systems. P"
+    },
+    {
+      "id": 8,
+      "role": "Software Engineer",
+      "resume_preview": "Sarah Ingram Software Engineer Contact Information: * Email: sarahingram@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/sarahingram * GitHub: github.com/sarahingram Professional Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, d"
+    },
+    {
+      "id": 9,
+      "role": "Software Engineer",
+      "resume_preview": "Sheena Johnson Contact Information: * Email: sjohnson@email.com * Phone: (555) 123-4567 * LinkedIn: linkedin.com/in/sheenajohnson * GitHub: github.com/sheenajohnson Professional Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing and developing la"
+    },
+    {
+      "id": 10,
+      "role": "Software Engineer",
+      "resume_preview": "Catherine Norman Software Engineer Contact Information: * Email: catherine.norman@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/catherine-norman * GitHub: github.com/catherine-norman Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in develo"
+    },
+    {
+      "id": 11,
+      "role": "Software Engineer",
+      "resume_preview": "Jennifer Hess Software Engineer Contact Information: * Email: jennifer.hess@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/jenniferhess * GitHub: github.com/jenniferhess Professional Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designi"
+    },
+    {
+      "id": 12,
+      "role": "Software Engineer",
+      "resume_preview": "Here's a sample professional resume for Joseph Miller: Joseph Miller Software Engineer Contact Information: * Email: joseph.miller@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/josephmiller * GitHub: github.com/josephmiller Summary: Highly motivated and experienced software engineer "
+    },
+    {
+      "id": 13,
+      "role": "Software Engineer",
+      "resume_preview": "Emily Ballard Contact Information: * Email: emily.ballard@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/emilyballard * GitHub: github.com/emilyballard Professional Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in developing scalable and eff"
+    },
+    {
+      "id": 14,
+      "role": "Software Engineer",
+      "resume_preview": "Ryan Morgan Contact Information: * Email: ryan.morgan@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/ryanmorgan Professional Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploying scalable software applicatio"
+    },
+    {
+      "id": 15,
+      "role": "Software Engineer",
+      "resume_preview": "Brittney Cox Software Engineer Contact Information: * Email: brittney.cox@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/brittneycox * GitHub: github.com/brittneycox Professional Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, de"
+    },
+    {
+      "id": 16,
+      "role": "Software Engineer",
+      "resume_preview": "Mary Peters Software Engineer Contact Information: * Email: mpeters@email.com * Phone: (555) 123-4567 * LinkedIn: linkedin.com/in/marypeters * GitHub: github.com/mpeters Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deployin"
+    },
+    {
+      "id": 17,
+      "role": "Software Engineer",
+      "resume_preview": "Richard Fischer Software Engineer Contact Information: * Email: richard.fischer@email.com * Phone: 555-123-4567 * LinkedIn: linkedin.com/in/richardfischer Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploying scalable and "
+    },
+    {
+      "id": 18,
+      "role": "Software Engineer",
+      "resume_preview": "Eric Pruitt Software Engineer Contact Information: * Email: eric.pruitt@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/ericpruitt * GitHub: github.com/ericpruitt Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and dep"
+    },
+    {
+      "id": 19,
+      "role": "Software Engineer",
+      "resume_preview": "Jason Jacobson Software Engineer Contact Information: * Email: jason.jacobson@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/jasonjacobson * GitHub: github.com/jasonjacobson Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, develop"
+    },
+    {
+      "id": 20,
+      "role": "Software Engineer",
+      "resume_preview": "Kristen Young Software Engineer Contact Information: * Email: kristen.young@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/kristenyoung * GitHub: github.com/kristenyoung Professional Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing"
+    },
+    {
+      "id": 21,
+      "role": "Software Engineer",
+      "resume_preview": "Steve King Software Engineer Contact Information: * Email: steve.king@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/stevekingsoftware * GitHub: github.com/stevekingsoftware Professional Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in desig"
+    },
+    {
+      "id": 22,
+      "role": "Software Engineer",
+      "resume_preview": "Justin Cardenas Contact Information: * Email: justin.cardenas@email.com * Phone: (555) 123-4567 * LinkedIn: linkedin.com/in/justincardenas * GitHub: github.com/justincardenas Professional Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing and dev"
+    },
+    {
+      "id": 23,
+      "role": "Software Engineer",
+      "resume_preview": "Christopher Spencer Software Engineer Contact Information: * Email: christopher.spencer@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/christopher-spencer * GitHub: github.com/christopherspencer Professional Summary: Highly motivated and experienced Software Engineer with a strong bac"
+    },
+    {
+      "id": 24,
+      "role": "Software Engineer",
+      "resume_preview": "Allison Medina Contact Information: * Email: allison.medina@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/allisonmedina * GitHub: github.com/allisonmedina Professional Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing"
+    },
+    {
+      "id": 25,
+      "role": "Software Engineer",
+      "resume_preview": "Daniel Krause Software Engineer Contact Information: * Email: dkrause@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/danielkrause Summary: Highly motivated and experienced software engineer with a strong background in Java, C++, and Python. Proven track record of delivering scalable a"
+    },
+    {
+      "id": 26,
+      "role": "Software Engineer",
+      "resume_preview": "David Roberson Software Engineer Contact Information: * Email: david.roberson@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/davidroberson Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploying scalable and eff"
+    },
+    {
+      "id": 27,
+      "role": "Software Engineer",
+      "resume_preview": "Here's a sample professional resume for James Moore: James Moore Software Engineer Contact Information: * Email: james.moore@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/jamesmoore * GitHub: github.com/jamesmoore Professional Summary: Highly motivated and detail-oriented software en"
+    },
+    {
+      "id": 28,
+      "role": "Software Engineer",
+      "resume_preview": "Juan Bell Software Engineer Contact Information: * Phone: (555) 123-4567 * Email: juan.bell@email.com * LinkedIn: linkedin.com/in/juanbell * GitHub: github.com/juanbell Summary: Highly motivated and detail-oriented Software Engineer with 5+ years of experience in designing, developing, and deploying"
+    },
+    {
+      "id": 29,
+      "role": "Software Engineer",
+      "resume_preview": "Alexa Todd Software Engineer Contact Information: * Phone: (555) 123-4567 * Email: alexatodd@email.com * LinkedIn: linkedin.com/in/alexatodd * GitHub: github.com/alexatodd Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploy"
+    },
+    {
+      "id": 30,
+      "role": "Software Engineer",
+      "resume_preview": "Robert Lambert Contact Information: * Email: robert.lambert@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/robertlambert Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploying scalable and efficient software "
+    },
+    {
+      "id": 31,
+      "role": "Software Engineer",
+      "resume_preview": "Richard Cameron, MD Contact Information: * Email: rcameron@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/richardcameronmd Summary: Results-driven software engineer with 8+ years of experience in designing, developing, and deploying scalable software systems. Proven expertise in Java, C"
+    },
+    {
+      "id": 32,
+      "role": "Software Engineer",
+      "resume_preview": "Walter Madden Software Engineer Contact Information: * Email: wmadden@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/waltermadden * GitHub: github.com/waltermadden Professional Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, de"
+    },
+    {
+      "id": 33,
+      "role": "Software Engineer",
+      "resume_preview": "Christopher Rivera Software Engineer Contact Information: * Email: christopherrivera@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/christopherrivera Summary: Results-driven software engineer with a strong foundation in Java and Python, with expertise in algorithms and system design. "
+    },
+    {
+      "id": 34,
+      "role": "Software Engineer",
+      "resume_preview": "Here's a sample professional resume for Leonard Cruz: Leonard Cruz Contact Information: * Email: leonardcruz@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/leonardcruz * GitHub: github.com/leonardcruz Summary: Highly skilled software engineer with 5+ years of experience in designing a"
+    },
+    {
+      "id": 35,
+      "role": "Software Engineer",
+      "resume_preview": "Edward Byrd Software Engineer Contact Information: * Email: edward.byrd@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/edwardbyrd Professional Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploying scalable, "
+    },
+    {
+      "id": 36,
+      "role": "Software Engineer",
+      "resume_preview": "Justin Hart Software Engineer Contact Information: * Phone: (123) 456-7890 * Email: justin.hart@email.com * LinkedIn: linkedin.com/in/justin-hart * GitHub: github.com/justin-hart Professional Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, de"
+    },
+    {
+      "id": 37,
+      "role": "Software Engineer",
+      "resume_preview": "Jeffrey Bailey Contact Information: * Email: jeffrey.bailey@email.com * Phone: 555-123-4567 * LinkedIn: linkedin.com/in/jeffreybailey Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and testing software applications using Java, Al"
+    },
+    {
+      "id": 38,
+      "role": "Software Engineer",
+      "resume_preview": "Luke Harris Software Engineer Contact Information: * Email: lukes.harris@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/lukemharris * GitHub: github.com/lukemharris Summary: Highly motivated and detail-oriented software engineer with 3+ years of experience in designing, developing, and "
+    },
+    {
+      "id": 39,
+      "role": "Software Engineer",
+      "resume_preview": "Michael Reynolds Software Engineer Contact Information: * Email: michael.reynolds@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/michaelreynoldss * GitHub: github.com/michaelreynoldss Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in web deve"
+    },
+    {
+      "id": 40,
+      "role": "Software Engineer",
+      "resume_preview": "Joshua Rodriguez Contact Information: * Email: joshuamrodriguez@email.com * Phone: (555) 123-4567 * LinkedIn: linkedin.com/in/joshuarodriguez Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploying scalable and efficient bac"
+    },
+    {
+      "id": 41,
+      "role": "Software Engineer",
+      "resume_preview": "Lisa Jacobson Contact Information: * Email: lisa.jacobson@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/lisajacobson Summary: Highly motivated and detail-oriented software engineer with expertise in algorithm and data structure, web development, version control, DevOps, and testing. Pr"
+    },
+    {
+      "id": 42,
+      "role": "Software Engineer",
+      "resume_preview": "Zachary Pratt Contact Information: * Email: zpratt@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/zpratt Summary: Highly motivated software engineer with expertise in Java, algorithmic problem-solving, and data structures. Proven ability to design, develop, and test scalable software sy"
+    },
+    {
+      "id": 43,
+      "role": "Software Engineer",
+      "resume_preview": "Heather Rowe Software Engineer Contact Information: * Email: heather.rowe@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/heatherrowe Summary: Highly motivated and detail-oriented software engineer with expertise in Java, algorithm design, data structures, web development, and API integr"
+    },
+    {
+      "id": 44,
+      "role": "Software Engineer",
+      "resume_preview": "Alyssa Alvarado Software Engineer Contact Information: * Email: alyssa.alvarado@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/alyssaalvarado Summary: Highly motivated and detail-oriented software engineer with a strong foundation in algorithm and data structure, backend development, an"
+    },
+    {
+      "id": 45,
+      "role": "Software Engineer",
+      "resume_preview": "Emily Hunt Software Engineer Contact Information: * Email: emilyhunt@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/emilyhuntsoftware Summary: Highly motivated and detail-oriented software engineer with expertise in algorithm and data structure, web development, backend development, ver"
+    },
+    {
+      "id": 46,
+      "role": "Software Engineer",
+      "resume_preview": "Mark Hernandez Contact Information: * Email: mark.hernandez@email.com * Phone: (555) 123-4567 * LinkedIn: linkedin.com/in/markhernandez Summary: Highly motivated and detail-oriented Software Engineer with 5+ years of experience in designing, developing, and deploying scalable software systems using "
+    },
+    {
+      "id": 47,
+      "role": "Software Engineer",
+      "resume_preview": "Thomas Cline Software Engineer Contact Information: * Email: thomas.cline@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/thomasclinesoftware Summary: Results-driven software engineer with expertise in algorithm and data structure, web development, version control, DevOps, testing, and A"
+    },
+    {
+      "id": 48,
+      "role": "Software Engineer",
+      "resume_preview": "Kimberly Prince Contact Information: * Email: kimberly.prince@email.com * Phone: (555) 123-4567 * LinkedIn: linkedin.com/in/kimberlyprince Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploying scalable software application"
+    },
+    {
+      "id": 49,
+      "role": "Software Engineer",
+      "resume_preview": "Kelsey Downs Contact Information: * Email: kelsey.downs@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/kelsyeesh Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploying scalable software applications using Java,"
+    },
+    {
+      "id": 50,
+      "role": "Software Engineer",
+      "resume_preview": "Kristy Jackson Contact Information: * Phone: (555) 555-5555 * Email: kristy.jackson@email.com * LinkedIn: linkedin.com/in/kristyjacksonsoftware * GitHub: github.com/kristyjackson Summary: Highly motivated and detail-oriented Software Engineer with 5+ years of experience in designing, developing, and"
+    },
+    {
+      "id": 51,
+      "role": "Software Engineer",
+      "resume_preview": "Barry Parrish Contact Information: * Phone: (555) 123-4567 * Email: bparrish@email.com * LinkedIn: linkedin.com/in/barryparrish * GitHub: github.com/bparrish Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploying scalable s"
+    },
+    {
+      "id": 52,
+      "role": "Software Engineer",
+      "resume_preview": "Christine Bond Software Engineer Contact Information: * Email: christine.bond@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/christinebond Summary: Highly motivated and detail-oriented software engineer with expertise in Java, Algorithm and Data Structure, Web Development, Backend Devel"
+    },
+    {
+      "id": 53,
+      "role": "Software Engineer",
+      "resume_preview": "Victor Johnson Software Engineer Contact Information: * Email: victor.johnson@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/victorjohnson * GitHub: github.com/victorjohnson Summary: Highly skilled Software Engineer with expertise in designing and developing efficient algorithms and dat"
+    },
+    {
+      "id": 54,
+      "role": "Software Engineer",
+      "resume_preview": "Jeffrey Smith Contact Information: * Email: jeffreysmith@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/jeffreysmith Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploying scalable backend applications using Ja"
+    },
+    {
+      "id": 55,
+      "role": "Software Engineer",
+      "resume_preview": "Michael Weaver Software Engineer Contact Information: * Email: mweaver@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/michaelweaver Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploying scalable and efficien"
+    },
+    {
+      "id": 56,
+      "role": "Software Engineer",
+      "resume_preview": "Charlotte Richard Software Engineer Contact Information: * Email: charlotte.richard@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/charlotterichard * GitHub: github.com/charlotterichard Summary: Highly motivated and detail-oriented software engineer with extensive experience in algorith"
+    },
+    {
+      "id": 57,
+      "role": "Software Engineer",
+      "resume_preview": "John Ellis Contact Information: * Email: john.ellis@email.com * Phone: 123-456-7890 * LinkedIn: linkedin.com/in/johnellis * GitHub: github.com/johnellis Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in Java, web development, and backend development. Prof"
+    },
+    {
+      "id": 58,
+      "role": "Software Engineer",
+      "resume_preview": "Holly Smith Contact Information: * Phone: (555) 123-4567 * Email: holly.smith@email.com * LinkedIn: linkedin.com/in/hollysmithsoftware Summary: Highly motivated and detail-oriented software engineer with expertise in developing scalable and efficient software solutions using a range of programming l"
+    },
+    {
+      "id": 59,
+      "role": "Software Engineer",
+      "resume_preview": "Teresa Myers Contact Information: * Phone: (555) 123-4567 * Email: teresamyers@email.com * LinkedIn: linkedin.com/in/teresamyers * GitHub: github.com/teresamyers Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in Java, web development, and backend developm"
+    },
+    {
+      "id": 60,
+      "role": "Software Engineer",
+      "resume_preview": "Randy Davis Software Engineer Contact Information: * Email: randydavis@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/randydavis Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploying scalable software systems "
+    },
+    {
+      "id": 61,
+      "role": "Software Engineer",
+      "resume_preview": "Jeffrey Howard Contact Information: * Email: jeffreyhoward@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/jeffreyhoward Summary: Highly motivated and detail-oriented software engineer with expertise in algorithm and data structure, web development, backend development, version control, "
+    },
+    {
+      "id": 62,
+      "role": "Software Engineer",
+      "resume_preview": "Debra Peck Software Engineer Contact Information: * Email: debra.peck@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/debrapeck Summary: Highly motivated Software Engineer with 5+ years of experience in Java development, algorithm and data structure design, and web development. Proficien"
+    },
+    {
+      "id": 63,
+      "role": "Software Engineer",
+      "resume_preview": "Michael Schmidt Contact Information: * Email: michael.schmidt@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/michaelschmidt Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploying scalable software systems using"
+    },
+    {
+      "id": 64,
+      "role": "Software Engineer",
+      "resume_preview": "Raymond Cameron Contact Information: * Email: raymond.cameron@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/raymond-cameron Summary: Results-driven software engineer with 5+ years of experience in designing, developing, and deploying scalable web applications using Java, Spring, and ot"
+    },
+    {
+      "id": 65,
+      "role": "Software Engineer",
+      "resume_preview": "Thomas Sanchez Software Engineer Contact Information: * Phone: 555-123-4567 * Email: thomas.sanchez@email.com * LinkedIn: linkedin.com/in/thomassanchezsoftware Summary: Highly motivated and experienced software engineer with a strong background in Java, algorithm, and data structure. Proficient in w"
+    },
+    {
+      "id": 66,
+      "role": "Software Engineer",
+      "resume_preview": "Kathy Bryant Contact Information: * Email: kathy.bryant@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/kathybryant Summary: Highly motivated and detail-oriented Software Engineer with 5+ years of experience in designing, developing, and deploying scalable software applications using Jav"
+    },
+    {
+      "id": 67,
+      "role": "Software Engineer",
+      "resume_preview": "Brandon Suarez Software Engineer Contact Information: * Email: brandon.suarez@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/brandon-suarez * GitHub: github.com/brandon-suarez Summary: Highly motivated and detail-oriented software engineer with expertise in Java, algorithm and data stru"
+    },
+    {
+      "id": 68,
+      "role": "Software Engineer",
+      "resume_preview": "Katherine Miller Contact Information: * Email: katherine.miller@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/katherine-miller Summary: Highly motivated and detail-oriented software engineer with expertise in Java, algorithm, and data structure. Proven experience in web development, ba"
+    },
+    {
+      "id": 69,
+      "role": "Software Engineer",
+      "resume_preview": "Christopher Simmons Contact Information: * Email: christophersimmons@email.com * Phone: 123-456-7890 * LinkedIn: linkedin.com/in/christophersimmons Summary: Highly skilled software engineer with expertise in Java, algorithms, and data structures. Proven track record of delivering high-quality web ap"
+    },
+    {
+      "id": 70,
+      "role": "Software Engineer",
+      "resume_preview": "Jason Stone Contact Information: * Email: jason.stone@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/jasonstone Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploying scalable, efficient, and reliable software "
+    },
+    {
+      "id": 71,
+      "role": "Software Engineer",
+      "resume_preview": "Amanda Shannon Contact Information: * Email: amanda.shannon@email.com * Phone: 555-123-4567 * LinkedIn: linkedin.com/in/amandashannon * GitHub: github.com/amandashannon Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploying"
+    },
+    {
+      "id": 72,
+      "role": "Software Engineer",
+      "resume_preview": "Aaron Jensen Contact Information: * Email: ajensen@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/aaronjensen * GitHub: github.com/aaronjensen Summary: Results-driven software engineer with 5+ years of experience in designing and developing scalable and efficient software systems using "
+    },
+    {
+      "id": 73,
+      "role": "Software Engineer",
+      "resume_preview": "Scott Jenkins Contact Information: * Email: sjenkins@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/scottjenkins Summary: Highly motivated and experienced software engineer with a strong background in Java, algorithm, and data structure. Skilled in web development, backend development, "
+    },
+    {
+      "id": 74,
+      "role": "Software Engineer",
+      "resume_preview": "Andrea Stewart Contact Information: * Email: andrea.stewart@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/andrea-stewart * GitHub: github.com/astewart Summary: Highly motivated and experienced software engineer with a strong background in Java, web development, and backend development."
+    },
+    {
+      "id": 75,
+      "role": "Software Engineer",
+      "resume_preview": "Jennifer Austin Contact Information: * Email: jennifer.austin@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/jennifer-austin-software-engineer Summary: Highly motivated and detail-oriented software engineer with expertise in Java, algorithmic thinking, and software development. Proficie"
+    },
+    {
+      "id": 76,
+      "role": "Software Engineer",
+      "resume_preview": "Kenneth Tucker Software Engineer Contact Information: * Email: ktucker@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/kennethtucker Summary: Highly skilled software engineer with expertise in backend development, version control, DevOps, and testing. Proficient in designing and implemen"
+    },
+    {
+      "id": 77,
+      "role": "Software Engineer",
+      "resume_preview": "Kim Curtis Contact Information: * Email: kcurtis@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/kcurtis Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and testing scalable software applications using Java and various"
+    },
+    {
+      "id": 78,
+      "role": "Software Engineer",
+      "resume_preview": "Jennifer Stone Contact Information: * Email: jennifer.stone@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/jenniferstone Summary: Highly motivated and detail-oriented software engineer with 3+ years of experience in designing, developing, and deploying scalable software applications. "
+    },
+    {
+      "id": 79,
+      "role": "Software Engineer",
+      "resume_preview": "Carolyn Sanchez Contact Information: * Email: carolyn.sanchez@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/carolynsanchez Summary: Highly motivated and detail-oriented Software Engineer with 5+ years of experience in designing, developing, and deploying scalable and efficient software"
+    },
+    {
+      "id": 80,
+      "role": "Software Engineer",
+      "resume_preview": "Kimberly Ray Contact Information: * Email: kimberly.ray@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/kimberlyray Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploying scalable software solutions using Java a"
+    },
+    {
+      "id": 81,
+      "role": "Software Engineer",
+      "resume_preview": "Scott Harvey Contact Information: * Email: scott.harvey@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/scottharvey Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, developing, and deploying scalable software applications. Skilled "
+    },
+    {
+      "id": 82,
+      "role": "Software Engineer",
+      "resume_preview": "John Williamson Software Engineer Contact Information: * Email: john.williamson@email.com * Phone: 555-123-4567 * LinkedIn: linkedin.com/in/johnwilliamson * GitHub: github.com/johnwilliamson Summary: Highly motivated and detail-oriented software engineer with 5+ years of experience in designing, dev"
+    },
+    {
+      "id": 83,
+      "role": "Software Engineer",
+      "resume_preview": "**Oliver** **Software Engineer** **Contact Information:** * Email: oliver@email.com * Phone: 123-456-7890 * LinkedIn: linkedin.com/in/oliver **Summary:** Highly motivated and experienced software engineer with a strong background in software development, problem-solving, and teamwork. Proven track r"
+    },
+    {
+      "id": 84,
+      "role": "Software Engineer",
+      "resume_preview": "**Sonia** **Contact Information:** * Email: sonia@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/sonia * GitHub: github.com/sonia **Summary:** Recent graduate with a degree in Computer Science, seeking an entry-level position in software engineering. Proficient in programming languages,"
+    },
+    {
+      "id": 85,
+      "role": "Software Engineer",
+      "resume_preview": "**Lucas** **Contact Information:** * Email: lucas@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/lucassoftware * GitHub: github.com/lucassw **Objective:** To obtain a Software Engineer position that utilizes my skills and knowledge to contribute to the development of innovative and ef"
+    },
+    {
+      "id": 86,
+      "role": "Software Engineer",
+      "resume_preview": "**Aarav** **Contact Information:** * Email: aarav@example.com * Phone: 123-456-7890 * LinkedIn: linkedin.com/in/aarav **Summary:** Highly motivated and detail-oriented software engineer with a strong foundation in computer science concepts and experience in developing efficient and scalable software"
+    },
+    {
+      "id": 87,
+      "role": "Software Engineer",
+      "resume_preview": "**Sonia** **Contact Information:** * Email: sonia@email.com * Phone: 123-456-7890 * LinkedIn: linkedin.com/in/sonia **Summary:** Dedicated software engineer with 3 years of experience in developing scalable and efficient software solutions. Proven track record of achieving high performance in compet"
+    },
+    {
+      "id": 88,
+      "role": "Software Engineer",
+      "resume_preview": "**Ananya** **Software Engineer Candidate** **Contact Information:** * Email: ananya@email.com * Phone: 123-456-7890 * LinkedIn: linkedin.com/in/ananya **Summary:** Highly motivated and detail-oriented software engineer with 5 years of experience in designing and developing software applications. Str"
+    },
+    {
+      "id": 89,
+      "role": "Software Engineer",
+      "resume_preview": "**Rajiv** **Contact Information:** * Email: rajiv@email.com * Phone: (123) 456-7890 * LinkedIn: linkedin.com/in/rajivsoftwareengineer * GitHub: github.com/rajivsoftwareengineer **Summary:** Highly skilled Senior Software Engineer with 10+ years of experience in designing, developing, and deploying l"
+    },
+    {
+      "id": 90,
+      "role": "Software Engineer",
+      "resume_preview": "**Ananya** **Contact Information:** * Phone: 123-456-7890 * Email: \\ananya@email.com * LinkedIn: linkedin.com/in/ananya * GitHub: github.com/ananya **Objective:** To obtain a software engineering position where I can utilize my skills to contribute to the company's success. **Education:** * **Bachel"
+    },
+    {
+      "id": 91,
+      "role": "Software Engineer",
+      "resume_preview": "**Meera** **Software Engineer Candidate** **Contact Information:** * Email: meera@email.com * Phone: 123-456-7890 * LinkedIn: linkedin.com/in/meera **Summary:** Highly motivated and detail-oriented software engineer with a strong foundation in computer science and a proven track record of success in"
+    },
+    {
+      "id": 92,
+      "role": "Software Engineer",
+      "resume_preview": "**Amara** **Software Engineer Candidate** **Contact Information:** * Email: amara@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/amara **Summary:** Results-driven software engineer with 3.6 years of experience in software development. Proven track record of leading projects and teams to"
+    },
+    {
+      "id": 93,
+      "role": "Software Engineer",
+      "resume_preview": "**Amara** **Contact Information:** * Email: amara@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/amara * GitHub: github.com/amara **Summary:** Highly motivated and experienced Software Engineer with a strong background in software development, leadership, and problem-solving. Proven tra"
+    },
+    {
+      "id": 94,
+      "role": "Software Engineer",
+      "resume_preview": "**Arjun** **Contact Information:** * Email: arjun@email.com * Phone: 123-456-7890 * LinkedIn: linkedin.com/in/arjunsoftware * GitHub: github.com/arjunsoftware **Summary:** Highly motivated and detail-oriented Software Engineer with 3+ years of experience in developing scalable and efficient software"
+    },
+    {
+      "id": 95,
+      "role": "Software Engineer",
+      "resume_preview": "**Diya** **Contact Information:** * Email: diya@example.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/diya **Summary:** Highly motivated and detail-oriented software enthusiast with basic programming skills. **Technical Skills:** * Programming languages: Basic understanding of C++, Python, a"
+    },
+    {
+      "id": 96,
+      "role": "Software Engineer",
+      "resume_preview": "**Neha** **Software Engineer** **Contact Information:** * Email: nehajain@gmail.com * Phone: 123-456-7890 * LinkedIn: linkedin.com/in/nehajainsoftware **Summary:** Highly skilled Senior Software Engineer with 7+ years of experience in designing, developing, and deploying scalable, efficient, and sec"
+    },
+    {
+      "id": 97,
+      "role": "Software Engineer",
+      "resume_preview": "**Meera** **Software Engineer Candidate** **Contact Information:** * Email: meera@email.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/meera * GitHub: github.com/meera **Summary:** Highly skilled Software Engineer with 5+ years of experience in designing and developing scalable software solut"
+    },
+    {
+      "id": 98,
+      "role": "Software Engineer",
+      "resume_preview": "**Maya** **Software Engineer Candidate** **Contact Information:** * Email: mayak@gmail.com * Phone: 555-555-5555 * LinkedIn: linkedin.com/in/mayaksoftware **Summary:** Highly motivated software engineer with 5 years of experience, seeking a challenging role that utilizes my skills in software develo"
+    },
+    {
+      "id": 99,
+      "role": "Software Engineer",
+      "resume_preview": "**Kunal** **Contact Information:** * Email: kunal@email.com * Phone: 123-456-7890 * LinkedIn: linkedin.com/in/kunalsoftware **Summary:** Highly motivated and detail-oriented software engineer with 4+ years of experience in designing, developing, and deploying scalable software applications. Proven t"
+    }
+  ],
+  "ground_truth": {
+    "total": 100,
+    "selected": 50,
+    "rejected": 50,
+    "select_rate": 0.5
+  }
+}
