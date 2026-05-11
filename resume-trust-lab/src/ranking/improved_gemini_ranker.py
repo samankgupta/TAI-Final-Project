@@ -75,7 +75,7 @@ class ImprovedGeminiRanker:
     
     def rank_resume_improved(self, job_description: str, resume: str) -> Dict:
         """Rank resume with grounding."""
-        cache_key = hashlib.md5(f"{job_description}|{resume}|improved".encode()).hexdigest()
+        cache_key = hashlib.md5(f"{job_description}|{resume}|improved_v3".encode()).hexdigest()
         
         if USE_API_CACHE:
             cache_file = self.cache_dir / f"{cache_key}.json"
@@ -90,39 +90,64 @@ class ImprovedGeminiRanker:
         self.enforce_rate_limit()
         self.api_requests += 1
         
-        try:
-            prompt = f"Rate resume for job (1-10). List ONLY skills from resume.\n\nJOB: {job_description[:300]}\n\nRESUME: {resume[:800]}\n\nScore (1-10):"
-            response = self.client.models.generate_content(
-                model=GEMINI_MODEL_NAME,
-                contents=prompt,
-            )
-            text = response.text or ""
-            
-            score = 5
+        max_retries = 5
+        for attempt in range(max_retries):
             try:
-                score = int(text.split(':')[1].strip().split()[0])
-                score = min(10, max(1, score))
-            except:
-                pass
-            
-            result = {
-                'score': score,
-                'hallucinated': [],
-                'hallucination_rate': 0.0,
-                'reasoning': text[:200],
-                'is_mock': False
-            }
-            
-            try:
-                cache_file = self.cache_dir / f"{cache_key}.json"
-                with open(cache_file, 'w') as f:
-                    json.dump(result, f)
-            except:
-                pass
-            
-            return result
-        except Exception as e:
-            raise RuntimeError(f"Improved Gemini scoring failed: {e}") from e
+                prompt = (
+                    f"Rate this resume for the job (1-10). List the skills and qualifications you identified. Explain your reasoning.\n\n"
+                    f"JOB: {job_description[:400]}\n\nRESUME: {resume[:900]}\n\n"
+                    f"Respond in this format:\nScore: X\nSkills: skill1, skill2, skill3\nReason: brief explanation"
+                )
+                response = self.client.models.generate_content(
+                    model=GEMINI_MODEL_NAME,
+                    contents=prompt,
+                )
+                text = response.text or ""
+
+                score = 5
+                skills = []
+                for line in text.split('\n'):
+                    line_lower = line.lower().strip()
+                    if line_lower.startswith('score:'):
+                        try:
+                            raw = line.split(':', 1)[1].strip().split()[0]
+                            score = min(10, max(1, int(raw.split('/')[0])))
+                        except:
+                            pass
+                    elif line_lower.startswith('skills:'):
+                        skills_str = line.split(':', 1)[1].strip()
+                        skills = [s.strip() for s in skills_str.split(',') if s.strip()]
+
+                hallucination_result = self.detect_hallucinations(resume, skills)
+                self.hallucinations_detected += hallucination_result['count']
+                adjusted_score = round(score * (1 - hallucination_result['rate']), 2)
+
+                result = {
+                    'score': adjusted_score,
+                    'raw_score': score,
+                    'hallucinated': hallucination_result['hallucinated'],
+                    'hallucination_rate': hallucination_result['rate'],
+                    'reasoning': text[:200],
+                    'is_mock': False
+                }
+
+                try:
+                    cache_file = self.cache_dir / f"{cache_key}.json"
+                    with open(cache_file, 'w') as f:
+                        json.dump(result, f)
+                except:
+                    pass
+
+                return result
+            except Exception as e:
+                err = str(e)
+                if ('429' in err or '503' in err) and attempt < max_retries - 1:
+                    wait_time = 20 * (attempt + 1)
+                    code = '429' if '429' in err else '503'
+                    print(f"  [{code} RETRY {attempt+1}/{max_retries-1}] Waiting {wait_time}s...")
+                    time.sleep(wait_time)
+                else:
+                    raise RuntimeError(f"Improved Gemini scoring failed: {e}") from e
     
     def run(self, df: pd.DataFrame, job_description: str, top_k: int = TOP_K_STAGE_4) -> Dict:
         """Run Stage 5."""
@@ -130,20 +155,23 @@ class ImprovedGeminiRanker:
         print(f"Scoring {len(df)} resumes... (Rate limit: {self.MAX_REQUESTS_PER_MINUTE} req/min)")
         
         scores = []
+        raw_scores = []
         hallucination_rates = []
         reasonings = []
-        
+
         for idx, (_, row) in enumerate(df.iterrows()):
             if (idx + 1) % 5 == 0:
                 print(f"  Scored {idx + 1}/{len(df)}")
-            
+
             result = self.rank_resume_improved(job_description, row['Resume'])
             scores.append(result['score'])
+            raw_scores.append(result['raw_score'])
             hallucination_rates.append(result['hallucination_rate'])
             reasonings.append(result.get('reasoning', ''))
-        
+
         ranking_df = df.copy()
         ranking_df['improved_score'] = scores
+        ranking_df['raw_score'] = raw_scores
         ranking_df['hallucination_rate'] = hallucination_rates
         ranking_df['improved_reasoning'] = reasonings
         ranking_df = ranking_df.sort_values('improved_score', ascending=False).reset_index(drop=True)
@@ -165,8 +193,9 @@ class ImprovedGeminiRanker:
         for idx, (_, row) in enumerate(top_k_df.iterrows(), 1):
             results['ranked_resumes'].append({
                 'rank': idx,
-                'id': idx - 1,
-                'improved_score': int(row['improved_score']),
+                'candidate_id': int(row['candidate_id']) if 'candidate_id' in row else idx - 1,
+                'improved_score': float(row['improved_score']),
+                'raw_score': int(row['raw_score']) if 'raw_score' in row else int(row['improved_score']),
                 'hallucination_rate': float(row['hallucination_rate']),
                 'reasoning': row.get('improved_reasoning', ''),
             })

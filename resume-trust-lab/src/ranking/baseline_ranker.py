@@ -50,7 +50,7 @@ class BaselineRanker:
         for idx, (_, row) in enumerate(top_k_df.iterrows(), 1):
             results['ranked_resumes'].append({
                 'rank': idx,
-                'id': idx - 1,
+                'candidate_id': int(row['candidate_id']) if 'candidate_id' in row else idx - 1,
                 'baseline_score': float(row['baseline_score']),
             })
         print(f"Input: {len(df):,} | Output: {len(top_k_df)}")

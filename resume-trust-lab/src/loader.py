@@ -7,7 +7,7 @@ from pathlib import Path
 import sys
 import re
 
-from config import DATASET_PATH, JOB_DESC_PATH, OUTPUT_DIR
+from config import DATASET_PATH, JOB_DESC_PATH, OUTPUT_DIR, DATA_DIR
 
 
 class DataLoader:
@@ -97,16 +97,24 @@ class DataLoader:
     
     def load_job_description(self, role: str = None, custom_path: str = None) -> str:
         """Load job description."""
-        path = custom_path or JOB_DESC_PATH
-        
+        if custom_path:
+            path = Path(custom_path)
+        else:
+            role_to_file = {
+                'e-commerce specialist': 'job_description_ecommerce.txt',
+                'software engineer': 'job_description_software_engineer.txt',
+            }
+            filename = role_to_file.get(role.lower() if role else '', None)
+            path = (DATA_DIR / filename) if filename else JOB_DESC_PATH
+
         if not Path(path).exists():
             print(f"Warning: Job description not found at {path}")
-            return f"Job Description for {role or 'E-commerce Specialist'}"
-        
+            return f"Job Description for {role or 'Unknown Role'}"
+
         with open(path, 'r') as f:
             self.job_description = f.read()
-            print(f"Loaded job description ({len(self.job_description)} chars)")
-            
+            print(f"Loaded job description for '{role}' ({len(self.job_description)} chars)")
+
         return self.job_description
     
     def filter_by_role(self, role: str, fuzzy: bool = False) -> Tuple[pd.DataFrame, int]:

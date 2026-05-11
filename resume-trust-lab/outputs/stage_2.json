@@ -9,260 +9,260 @@
   "output_count": 50,
   "retention_rate": 0.5,
   "score_stats": {
-    "min": 0.02776373486259342,
-    "max": 0.24160311967367418,
-    "mean": 0.111217847648122
+    "min": 0.0728549067548862,
+    "max": 0.22591607830727883,
+    "mean": 0.1301666988948406
   },
   "ranked_resumes": [
     {
       "rank": 1,
-      "id": 0,
-      "baseline_score": 0.24160311967367418
+      "candidate_id": 4,
+      "baseline_score": 0.22591607830727883
     },
     {
       "rank": 2,
-      "id": 1,
-      "baseline_score": 0.2150493568220118
+      "candidate_id": 25,
+      "baseline_score": 0.22163891336662078
     },
     {
       "rank": 3,
-      "id": 2,
-      "baseline_score": 0.20373860142769584
+      "candidate_id": 0,
+      "baseline_score": 0.21021062274454158
     },
     {
       "rank": 4,
-      "id": 3,
-      "baseline_score": 0.19465785867957525
+      "candidate_id": 35,
+      "baseline_score": 0.20974823974244236
     },
     {
       "rank": 5,
-      "id": 4,
-      "baseline_score": 0.1928236168546215
+      "candidate_id": 40,
+      "baseline_score": 0.20307586966813637
     },
     {
       "rank": 6,
-      "id": 5,
-      "baseline_score": 0.19005658769664246
+      "candidate_id": 11,
+      "baseline_score": 0.1924129893626881
     },
     {
       "rank": 7,
-      "id": 6,
-      "baseline_score": 0.1823273569880677
+      "candidate_id": 6,
+      "baseline_score": 0.18711278767636838
     },
     {
       "rank": 8,
-      "id": 7,
-      "baseline_score": 0.18072343864936163
+      "candidate_id": 5,
+      "baseline_score": 0.18452629210144625
     },
     {
       "rank": 9,
-      "id": 8,
-      "baseline_score": 0.17959221494775993
+      "candidate_id": 22,
+      "baseline_score": 0.18423980528496958
     },
     {
       "rank": 10,
-      "id": 9,
-      "baseline_score": 0.17796913318375282
+      "candidate_id": 18,
+      "baseline_score": 0.18131893570495622
     },
     {
       "rank": 11,
-      "id": 10,
-      "baseline_score": 0.17729696277826068
+      "candidate_id": 12,
+      "baseline_score": 0.17943353701257694
     },
     {
       "rank": 12,
-      "id": 11,
-      "baseline_score": 0.16774538151624063
+      "candidate_id": 29,
+      "baseline_score": 0.17675053502631977
     },
     {
       "rank": 13,
-      "id": 12,
-      "baseline_score": 0.15894071122362227
+      "candidate_id": 28,
+      "baseline_score": 0.17294020760203427
     },
     {
       "rank": 14,
-      "id": 13,
-      "baseline_score": 0.1586895396264771
+      "candidate_id": 88,
+      "baseline_score": 0.16816896771973974
     },
     {
       "rank": 15,
-      "id": 14,
-      "baseline_score": 0.15822510568546713
+      "candidate_id": 46,
+      "baseline_score": 0.16093480153703285
     },
     {
       "rank": 16,
-      "id": 15,
-      "baseline_score": 0.15545565406345152
+      "candidate_id": 99,
+      "baseline_score": 0.16013494173485926
     },
     {
       "rank": 17,
-      "id": 16,
-      "baseline_score": 0.15383195216704498
+      "candidate_id": 9,
+      "baseline_score": 0.1589680635386944
     },
     {
       "rank": 18,
-      "id": 17,
-      "baseline_score": 0.1509087554493442
+      "candidate_id": 58,
+      "baseline_score": 0.15767071200381796
     },
     {
       "rank": 19,
-      "id": 18,
-      "baseline_score": 0.1494446455260071
+      "candidate_id": 27,
+      "baseline_score": 0.15683902200797972
     },
     {
       "rank": 20,
-      "id": 19,
-      "baseline_score": 0.14539256203916348
+      "candidate_id": 13,
+      "baseline_score": 0.1559058657438431
     },
     {
       "rank": 21,
-      "id": 20,
-      "baseline_score": 0.14475417587577416
+      "candidate_id": 34,
+      "baseline_score": 0.15442794091702955
     },
     {
       "rank": 22,
-      "id": 21,
-      "baseline_score": 0.14469611979803607
+      "candidate_id": 53,
+      "baseline_score": 0.15398642491709644
     },
     {
       "rank": 23,
-      "id": 22,
-      "baseline_score": 0.14400176390061944
+      "candidate_id": 55,
+      "baseline_score": 0.15320064533949634
     },
     {
       "rank": 24,
-      "id": 23,
-      "baseline_score": 0.14236550171476675
+      "candidate_id": 72,
+      "baseline_score": 0.15274197233346085
     },
     {
       "rank": 25,
-      "id": 24,
-      "baseline_score": 0.1404573904010946
+      "candidate_id": 96,
+      "baseline_score": 0.1522097418079238
     },
     {
       "rank": 26,
-      "id": 25,
-      "baseline_score": 0.13853609481011803
+      "candidate_id": 49,
+      "baseline_score": 0.15220110797486797
     },
     {
       "rank": 27,
-      "id": 26,
-      "baseline_score": 0.13717790170165425
+      "candidate_id": 32,
+      "baseline_score": 0.15151909044975306
     },
     {
       "rank": 28,
-      "id": 27,
-      "baseline_score": 0.13690690930831076
+      "candidate_id": 23,
+      "baseline_score": 0.15064649525139354
     },
     {
       "rank": 29,
-      "id": 28,
-      "baseline_score": 0.13665281262321427
+      "candidate_id": 93,
+      "baseline_score": 0.14644408304244808
     },
     {
       "rank": 30,
-      "id": 29,
-      "baseline_score": 0.13426545225089226
+      "candidate_id": 30,
+      "baseline_score": 0.14526149686066775
     },
     {
       "rank": 31,
-      "id": 30,
-      "baseline_score": 0.1317193107825325
+      "candidate_id": 21,
+      "baseline_score": 0.14339251846294065
     },
     {
       "rank": 32,
-      "id": 31,
-      "baseline_score": 0.13008093701204607
+      "candidate_id": 43,
+      "baseline_score": 0.14240805687995223
     },
     {
       "rank": 33,
-      "id": 32,
-      "baseline_score": 0.1278741887812865
+      "candidate_id": 1,
+      "baseline_score": 0.14239360831323375
     },
     {
       "rank": 34,
-      "id": 33,
-      "baseline_score": 0.12509902976324833
+      "candidate_id": 44,
+      "baseline_score": 0.14140207990503345
     },
     {
       "rank": 35,
-      "id": 34,
-      "baseline_score": 0.12420733706980895
+      "candidate_id": 47,
+      "baseline_score": 0.1402798092151172
     },
     {
       "rank": 36,
-      "id": 35,
-      "baseline_score": 0.12307770627265968
+      "candidate_id": 20,
+      "baseline_score": 0.13861523388360378
     },
     {
       "rank": 37,
-      "id": 36,
-      "baseline_score": 0.12262807086688869
+      "candidate_id": 57,
+      "baseline_score": 0.13746630075256352
     },
     {
       "rank": 38,
-      "id": 37,
-      "baseline_score": 0.12026104704031657
+      "candidate_id": 33,
+      "baseline_score": 0.13735959429840516
     },
     {
       "rank": 39,
-      "id": 38,
-      "baseline_score": 0.1194206281556489
+      "candidate_id": 91,
+      "baseline_score": 0.1370382560455311
     },
     {
       "rank": 40,
-      "id": 39,
-      "baseline_score": 0.11821098727113807
+      "candidate_id": 38,
+      "baseline_score": 0.13448258862389253
     },
     {
       "rank": 41,
-      "id": 40,
-      "baseline_score": 0.11780657613793763
+      "candidate_id": 2,
+      "baseline_score": 0.13413122626347432
     },
     {
       "rank": 42,
-      "id": 41,
-      "baseline_score": 0.11724950861210115
+      "candidate_id": 26,
+      "baseline_score": 0.1340110038190746
     },
     {
       "rank": 43,
-      "id": 42,
-      "baseline_score": 0.11684513276986516
+      "candidate_id": 69,
+      "baseline_score": 0.13348851882946697
     },
     {
       "rank": 44,
-      "id": 43,
-      "baseline_score": 0.11565058400065686
+      "candidate_id": 74,
+      "baseline_score": 0.13346359287621082
     },
     {
       "rank": 45,
-      "id": 44,
-      "baseline_score": 0.11523478057730947
+      "candidate_id": 45,
+      "baseline_score": 0.1310128612642159
     },
     {
       "rank": 46,
-      "id": 45,
-      "baseline_score": 0.11418206640200375
+      "candidate_id": 73,
+      "baseline_score": 0.12961326400723058
     },
     {
       "rank": 47,
-      "id": 46,
-      "baseline_score": 0.11106423468219238
+      "candidate_id": 17,
+      "baseline_score": 0.1290057021785115
     },
     {
       "rank": 48,
-      "id": 47,
-      "baseline_score": 0.11098161727503703
+      "candidate_id": 60,
+      "baseline_score": 0.12846969788634177
     },
     {
       "rank": 49,
-      "id": 48,
-      "baseline_score": 0.10975337600785832
+      "candidate_id": 8,
+      "baseline_score": 0.1284048353322248
     },
     {
       "rank": 50,
-      "id": 49,
-      "baseline_score": 0.10582085674487135
+      "candidate_id": 98,
+      "baseline_score": 0.1282527918566087
     }
   ]
 }
