@@ -3,52 +3,82 @@
   "stage_name": "Gemini Ranking (Base)",
   "parameters": {
     "method": "Gemini API",
-    "top_k": 5,
+    "top_k": 10,
     "rate_limit": "13/min"
   },
   "cache_stats": {
-    "hits": 0,
-    "misses": 50,
-    "api_requests": 1
+    "hits": 50,
+    "misses": 0,
+    "api_requests": 0
   },
   "input_count": 50,
-  "output_count": 5,
-  "retention_rate": 0.1,
+  "output_count": 10,
+  "retention_rate": 0.2,
   "score_stats": {
-    "min": 5,
+    "min": 1,
     "max": 10,
-    "mean": 9.9
+    "mean": 5.68
   },
   "ranked_resumes": [
     {
       "rank": 1,
-      "id": 0,
+      "candidate_id": 11,
       "gemini_score": 10,
-      "reasoning": "[MOCK] Based on resume length"
+      "reasoning": "**Score: 8/10**\n\n**Reasoning:**\nJennifer is a very strong candidate for this role. Her background aligns perfectly with the core technical requirement"
     },
     {
       "rank": 2,
-      "id": 1,
+      "candidate_id": 7,
       "gemini_score": 10,
-      "reasoning": "[MOCK] Based on resume length"
+      "reasoning": "**Score: 8/10**\n\n**Reasoning:**\nJohn Morgan is a very strong candidate who fits the \"Full Stack\" requirement well. He possesses the specific core comp"
     },
     {
       "rank": 3,
-      "id": 2,
+      "candidate_id": 5,
       "gemini_score": 10,
-      "reasoning": "[MOCK] Based on resume length"
+      "reasoning": "**Score: 8/10**\n\n**Reasoning:**\nErin Stout is a strong candidate for the position. Her resume directly addresses the core requirements mentioned in th"
     },
     {
       "rank": 4,
-      "id": 3,
-      "gemini_score": 10,
-      "reasoning": "[MOCK] Based on resume length"
+      "candidate_id": 56,
+      "gemini_score": 9,
+      "reasoning": "**Score: 7/10**\n\n**Reason:**\nCharlotte is a strong candidate who clearly possesses the core technical requirements for a full-stack role (Java, Python"
     },
     {
       "rank": 5,
-      "id": 4,
-      "gemini_score": 10,
-      "reasoning": "[MOCK] Based on resume length"
+      "candidate_id": 32,
+      "gemini_score": 9,
+      "reasoning": "**Score: 7/10**\n\n### Reason:\nWalter Madden is a strong candidate who clearly meets the core technical requirements of the role.\n\n*   **Strengths:** Th"
+    },
+    {
+      "rank": 6,
+      "candidate_id": 89,
+      "gemini_score": 9,
+      "reasoning": "**Score: 7/10**\n\n**Reason:**\nRajiv is a strong candidate with relevant seniority (10+ years) and experience in cloud infrastructure and large-scale ap"
+    },
+    {
+      "rank": 7,
+      "candidate_id": 34,
+      "gemini_score": 9,
+      "reasoning": "**Score: 7/10**\n\n### Reason:\n*   **Strengths:** Leonard is a very strong match for the core requirements. He has 5+ years of experience, a relevant te"
+    },
+    {
+      "rank": 8,
+      "candidate_id": 26,
+      "gemini_score": 9,
+      "reasoning": "**Score: 7/10**\n\n### Reason:\nDavid is a strong candidate, but the resume is currently missing some key components to make it a perfect match for this "
+    },
+    {
+      "rank": 9,
+      "candidate_id": 23,
+      "gemini_score": 9,
+      "reasoning": "**Score: 7/10**\n\n**Reasoning:**\nChristopher is a strong candidate for the position, but the resume feels slightly incomplete as presented.\n\n*   **Stre"
+    },
+    {
+      "rank": 10,
+      "candidate_id": 44,
+      "gemini_score": 9,
+      "reasoning": "**Score: 7/10**\n\n### Reason:\nAlyssa is a strong technical match for the role, but the resume is currently incomplete.\n\n*   **The Strengths:** She hits"
     }
   ]
 }

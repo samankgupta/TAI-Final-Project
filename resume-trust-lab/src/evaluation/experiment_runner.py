@@ -1,6 +1,7 @@
 """Experiment runner - orchestrates pipeline."""
 
 import json
+import time
 from typing import Optional
 import pandas as pd
 from pathlib import Path
@@ -49,6 +50,7 @@ class ExperimentRunner:
         role_filter.save_results(results, str(STAGE_1_OUTPUT))
         self.stage_results['stage_1'] = results
         self.df = filtered_df
+        self.df['candidate_id'] = range(len(self.df))
     
     def run_stage_2(self, top_k: int = 50) -> None:
         """Run Stage 2."""
@@ -63,7 +65,7 @@ class ExperimentRunner:
         self.stage_results['stage_2'] = results
         self.ranked_dfs['stage_2'] = ranked_df
     
-    def run_stage_3(self, top_k: int = 25) -> None:
+    def run_stage_3(self, top_k: int = 30) -> None:
         """Run Stage 3."""
         if self.df is None:
             raise ValueError("Must run Stage 1 first")
@@ -77,7 +79,7 @@ class ExperimentRunner:
         self.stage_results['stage_3'] = results
         self.ranked_dfs['stage_3'] = ranked_df
     
-    def run_stage_4(self, top_k: int = 5) -> None:
+    def run_stage_4(self, top_k: int = 10) -> None:
         """Run Stage 4."""
         if self.job_description is None:
             self.load_job_description()
@@ -89,7 +91,7 @@ class ExperimentRunner:
         self.stage_results['stage_4'] = results
         self.ranked_dfs['stage_4'] = ranked_df
     
-    def run_stage_5(self, top_k: int = 5) -> None:
+    def run_stage_5(self, top_k: int = 10) -> None:
         """Run Stage 5."""
         if self.job_description is None:
             self.load_job_description()
@@ -120,6 +122,9 @@ class ExperimentRunner:
         if 4 in stages:
             self.run_stage_4()
         if 5 in stages:
+            if 4 in stages:
+                print("\n[Cooldown] Waiting 65s for Gemini rate limit window to reset...")
+                time.sleep(65)
             self.run_stage_5()
         
         print("\n" + "="*70 + "\nALL STAGES COMPLETED\n" + "="*70)

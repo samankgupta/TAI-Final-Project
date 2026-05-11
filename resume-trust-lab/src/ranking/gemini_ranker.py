@@ -98,36 +98,48 @@ class GeminiRanker:
         self.enforce_rate_limit()
         self.api_requests += 1
         
-        try:
-            prompt = f"Rate this resume match for the job (1-10):\n\nJOB: {job_description[:500]}\n\nRESUME: {resume[:1000]}\n\nScore and brief reason:"
-            response = self.client.models.generate_content(
-                model=GEMINI_MODEL_NAME,
-                contents=prompt,
-            )
-            text = response.text or ""
-            
-            score = 5
-            if "SCORE:" in text or "Score:" in text or "10" in text or "9" in text or "8" in text or "7" in text or "6" in text:
-                parts = text.split()
-                for i, part in enumerate(parts):
-                    try:
-                        num = int(part.strip('.,;:'))
-                        if 1 <= num <= 10:
-                            score = num
-                            break
-                    except:
-                        pass
-            
-            score = min(10, max(1, score))
-            result = {'score': score, 'reasoning': text[:150], 'is_mock': False}
-            
-            # Cache the response
-            if USE_API_CACHE:
-                self.save_cached_response(cache_key, result)
-            
-            return result
-        except Exception as e:
-            raise RuntimeError(f"Gemini scoring failed: {e}") from e
+        max_retries = 5
+        for attempt in range(max_retries):
+            try:
+                prompt = f"Rate this resume match for the job (1-10):\n\nJOB: {job_description[:500]}\n\nRESUME: {resume[:1000]}\n\nScore and brief reason:"
+                response = self.client.models.generate_content(
+                    model=GEMINI_MODEL_NAME,
+                    contents=prompt,
+                )
+                text = response.text or ""
+
+                score = 5
+                import re
+                match = re.search(r'\b([1-9]|10)\s*/\s*10\b', text)
+                if match:
+                    score = int(match.group(1))
+                else:
+                    match = re.search(r'(?:score|rating)[:\s]+([1-9]|10)\b', text, re.IGNORECASE)
+                    if match:
+                        score = int(match.group(1))
+                    else:
+                        for part in text.split():
+                            try:
+                                num = int(part.strip('.,;:()'))
+                                if 1 <= num <= 10:
+                                    score = num
+                                    break
+                            except:
+                                pass
+                score = min(10, max(1, score))
+                result = {'score': score, 'reasoning': text[:150], 'is_mock': False}
+
+                if USE_API_CACHE:
+                    self.save_cached_response(cache_key, result)
+
+                return result
+            except Exception as e:
+                if '429' in str(e) and attempt < max_retries - 1:
+                    wait_time = 20 * (attempt + 1)
+                    print(f"  [429 RETRY {attempt+1}/{max_retries-1}] Waiting {wait_time}s...")
+                    time.sleep(wait_time)
+                else:
+                    raise RuntimeError(f"Gemini scoring failed: {e}") from e
     
     def run(self, df: pd.DataFrame, job_description: str, top_k: int = TOP_K_STAGE_4) -> Dict:
         """Run Stage 4: Gemini-based ranking."""
@@ -165,7 +177,7 @@ class GeminiRanker:
         for idx, (_, row) in enumerate(top_k_df.iterrows(), 1):
             results['ranked_resumes'].append({
                 'rank': idx,
-                'id': idx - 1,
+                'candidate_id': int(row['candidate_id']) if 'candidate_id' in row else idx - 1,
                 'gemini_score': int(row['gemini_score']),
                 'reasoning': row.get('gemini_reasoning', ''),
             })

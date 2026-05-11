@@ -3,54 +3,106 @@
   "stage_name": "Improved Gemini (With Grounding)",
   "parameters": {
     "method": "Gemini with Grounding",
-    "top_k": 5,
+    "top_k": 10,
     "rate_limit": "13/min"
   },
   "cache_stats": {
-    "hits": 0,
-    "misses": 4,
-    "api_requests": 1
+    "hits": 50,
+    "misses": 0,
+    "api_requests": 0
   },
   "hallucination_stats": {
     "detected": 0,
-    "avg_rate": 0.0
+    "avg_rate": 0.10919814335990807
   },
-  "input_count": 4,
-  "output_count": 4,
-  "retention_rate": 1.0,
+  "input_count": 50,
+  "output_count": 10,
+  "retention_rate": 0.2,
   "score_stats": {
-    "min": 5,
-    "max": 10,
-    "mean": 8.75
+    "min": 0.0,
+    "max": 7.0,
+    "mean": 4.6094
   },
   "ranked_resumes": [
     {
       "rank": 1,
-      "id": 0,
-      "improved_score": 10,
+      "candidate_id": 32,
+      "improved_score": 7.0,
+      "raw_score": 7,
       "hallucination_rate": 0.0,
-      "reasoning": "[MOCK] Score based on cleaned resume quality proxy."
+      "reasoning": "Score: 7/10\n\nSkills: Java, Python, C++, Spring, Django, Flask, Docker, Kubernetes, Jenkins, Git, Agile methodologies, Data structures, Algorithms.\n\nReason: The resume clearly outlines a strong technic"
     },
     {
       "rank": 2,
-      "id": 1,
-      "improved_score": 10,
-      "hallucination_rate": 0.0,
-      "reasoning": "[MOCK] Score based on cleaned resume quality proxy."
+      "candidate_id": 20,
+      "improved_score": 6.59,
+      "raw_score": 7,
+      "hallucination_rate": 0.058823529411764705,
+      "reasoning": "Score: 7/10\n\nSkills: Java, C++, Python, JavaScript, Spring, Django, Flask, MySQL, MongoDB, PostgreSQL, AWS, Azure, Google Cloud, Scrum, Agile methodology, System Design, DevOps.\n\nReason: The resume is"
     },
     {
       "rank": 3,
-      "id": 2,
-      "improved_score": 10,
-      "hallucination_rate": 0.0,
-      "reasoning": "[MOCK] Score based on cleaned resume quality proxy."
+      "candidate_id": 33,
+      "improved_score": 6.56,
+      "raw_score": 7,
+      "hallucination_rate": 0.0625,
+      "reasoning": "Score: 7/10\n\nSkills: Java, Python, C++, JavaScript, Spring Boot, Django, Flask, MySQL, PostgreSQL, MongoDB, Git, SVN, Scrum, Kanban, System Design, Algorithms.\n\nReason: The resume is technically stron"
     },
     {
       "rank": 4,
-      "id": 3,
-      "improved_score": 5,
+      "candidate_id": 96,
+      "improved_score": 6.53,
+      "raw_score": 7,
+      "hallucination_rate": 0.06666666666666667,
+      "reasoning": "Score: 7/10\n\nSkills: Java, Python, C++, JavaScript, Spring, Django, React, MySQL, MongoDB, PostgreSQL, AWS, Azure, Google Cloud, Agile (Scrum/Kanban), Jira\n\nReason: The candidate is technically highly"
+    },
+    {
+      "rank": 5,
+      "candidate_id": 5,
+      "improved_score": 6.0,
+      "raw_score": 6,
       "hallucination_rate": 0.0,
-      "reasoning": "[MOCK] Gemini model unavailable; using fallback score."
+      "reasoning": "Score: 6/10\n\nSkills: Java, Python, JavaScript, Spring, Django, React, MySQL, PostgreSQL, MongoDB, Linux, Windows, Jenkins, Docker, Kubernetes, Agile Methodologies\n\nReason: The resume hits the core tec"
+    },
+    {
+      "rank": 6,
+      "candidate_id": 29,
+      "improved_score": 6.0,
+      "raw_score": 6,
+      "hallucination_rate": 0.0,
+      "reasoning": "Score: 6/10\n\nSkills: C++, Python, Java, Data Structures, Algorithms, System Design, Microservices, AWS, Azure, Git, Docker, Kubernetes, CI/CD\n\nReason: The resume identifies strong foundational technic"
+    },
+    {
+      "rank": 7,
+      "candidate_id": 39,
+      "improved_score": 6.0,
+      "raw_score": 6,
+      "hallucination_rate": 0.0,
+      "reasoning": "Score: 6/10\n\nSkills: Java, Python, JavaScript, C#, React, Angular, Vue.js, Spring Boot, Django, Flask, MySQL, PostgreSQL, MongoDB, Redis, Git, SVN, JUnit, PyUnit, Jest, REST, GraphQL, SOAP, Scrum, Kan"
+    },
+    {
+      "rank": 8,
+      "candidate_id": 44,
+      "improved_score": 5.71,
+      "raw_score": 6,
+      "hallucination_rate": 0.047619047619047616,
+      "reasoning": "Score: 6/10\n\nSkills: Java, Python, C++, Spring Boot, Django, MySQL, PostgreSQL, MongoDB, Algorithms, Data Structures, Git, SVN, Docker, Kubernetes, Jenkins, JUnit, PyUnit, TDD, REST, GraphQL, API Desi"
+    },
+    {
+      "rank": 9,
+      "candidate_id": 25,
+      "improved_score": 5.6,
+      "raw_score": 7,
+      "hallucination_rate": 0.2,
+      "reasoning": "Score: 7/10\n\nSkills: Java, C++, Python, Spring Boot, Hibernate, System Design, Algorithms, DevOps, CI/CD, E-commerce development.\n\nReason: The candidate demonstrates strong technical proficiency and q"
+    },
+    {
+      "rank": 10,
+      "candidate_id": 94,
+      "improved_score": 5.54,
+      "raw_score": 6,
+      "hallucination_rate": 0.07692307692307693,
+      "reasoning": "Score: 6/10\n\nSkills: Java, Python, C++, JavaScript, Spring, Django, React, MySQL, MongoDB, PostgreSQL, AWS, Google Cloud, Agile (Scrum/Kanban)\n\nReason: The resume contains a solid, well-rounded techni"
     }
   ]
 }

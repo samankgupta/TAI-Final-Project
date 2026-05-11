@@ -7,9 +7,15 @@
     "stage_5"
   ],
   "tss_scores": {
-    "stage_2_vs_stage_3": 1.0,
-    "stage_3_vs_stage_4": 1.0,
-    "stage_4_vs_stage_5": 1.0
+    "stage_2_vs_stage_3": 0.311,
+    "stage_3_vs_stage_4": 0.176,
+    "stage_4_vs_stage_5": 0.176
+  },
+  "precision_at_k": {
+    "stage_2": 0.56,
+    "stage_3": 0.633,
+    "stage_4": 0.5,
+    "stage_5": 0.8
   },
   "hallucination_rates": {}
 }
