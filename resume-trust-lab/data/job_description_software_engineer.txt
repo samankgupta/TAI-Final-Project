@@ -1,0 +1,23 @@
+Software Engineer - 
+Our growing company is searching for experienced candidates for the position of full stack software engineer. Thank you in advance for taking a look at the list of responsibilities and qualifications. We look forward to reviewing your resume.
+
+Responsibilities for full stack software engineer
+• Develop and recommending novel and innovative approaches to solving business and technical problems
+• Apply sound Dev Ops and automation best practices
+• Prepare and present potential technical solutions and advising the business on the technical and business value of the proposition
+• Actively participate in internal and external Communities of Practice
+• Must have experience with the design and development of web based applications and enterprise integrations
+• Build excellent user experiences
+• Engineer the libraries and frameworks that power across the stack
+• You will take on tough design and product problems
+• You take full ownership of projects from design to implementation and deployment
+• Write well-crafted, tested, readable and maintainable code that has business value
+
+Qualifications for full stack software engineer
+• Knowledge of current web dev
+• Familiar with databases and/or data-warehousing
+• Are able to combine long-term vision with incremental improvements along the way
+• Assume ownership over certain systems and continuously work on improving them
+• Interest in data architecture and data visualization
+• Plus if you are an active open source user and community member
+
