@@ -1,233 +1,142 @@
-# Resume Trust Lab System
+# Resume Trust Lab
 
-**A multi-stage AI resume screening and trust evaluation system** that demonstrates how different ranking methods perform, measure their reliability, and detect LLM hallucinations in AI-driven hiring.
+A multi-stage AI resume screening pipeline that evaluates trustworthiness and ranking quality across progressively smarter methods — from keyword matching to LLM-based scoring with hallucination detection.
 
-## 🎯 What This Does
+## What It Does
 
-This is a **research-grade system** that:
+Given a job role and a dataset of resumes, the system runs candidates through five sequential filtering and ranking stages, narrowing the pool at each step. After all stages complete, it computes trust metrics to evaluate how well each stage performed and how consistent the rankings were across stages.
 
-1. **Filters** resumes by job role
-2. **Ranks** resumes using 4 different methods:
-   - Baseline: TF-IDF keyword similarity
-   - Embeddings: Semantic similarity  
-   - Gemini Base: LLM ranking
-   - Gemini Improved: LLM with hallucination detection
-3. **Compares** methods using trust metrics
-4. **Tracks** failures, hallucinations, and ranking disagreements
-5. **Measures** system improvement incrementally
+## Pipeline Stages
 
-## 🚀 Quick Start
-
-### Installation
-
-```bash
-cd resume-trust-lab
-pip install -r requirements.txt
+```
+All resumes in dataset
+        │
+  [Stage 1] Role Filter  (exact/fuzzy match on job title)
+        │  → up to 100 candidates
+  [Stage 2] Baseline Ranking  (TF-IDF cosine similarity vs job description)
+        │  → top 50
+  [Stage 3] Embedding Ranking  (sentence-transformers, all-MiniLM-L6-v2)
+        │  → top 30
+  [Stage 4] Gemini Ranking  (Gemini LLM, 1-100 score)
+        │  → top 10
+  [Stage 5] Improved Gemini  (Gemini + hallucination penalty)
+             → top 10 final candidates
 ```
 
-### Run
+### Stage 1 — Role Filter
+Loads the full dataset and keeps resumes where the candidate's job title matches the target role (exact or fuzzy). Also loads ground-truth hiring decisions (`select` / `reject`) that are used later for precision metrics.
 
-**Interactive Mode (easiest):**
-```bash
-cd src
-python main.py
+### Stage 2 — TF-IDF Baseline
+Ranks filtered resumes using TF-IDF cosine similarity against the job description. Fast and purely keyword-based — no understanding of meaning. Keeps top 50.
+
+### Stage 3 — Embedding Ranking
+Re-ranks Stage 2's top candidates using semantic embeddings (`all-MiniLM-L6-v2` via `sentence-transformers`). Captures meaning rather than just keyword overlap. Keeps top 30.
+
+### Stage 4 — Gemini Ranking (Base)
+Sends each resume to the Gemini API (`gemini-3.1-flash-lite`) with the job description and asks for a 1–100 score plus reasoning. Rate-limited to 13 requests/minute. Responses are cached to avoid redundant API calls. Keeps top 10.
+
+### Stage 5 — Improved Gemini (With Grounding)
+Same as Stage 4 but adds **hallucination detection**: after Gemini returns a list of skills it identified in the resume, each skill is checked against the actual resume text. Skills not present in the resume are flagged as hallucinations. The raw score is penalized proportionally:
+
+```
+adjusted_score = raw_score × (1 − hallucination_rate)
 ```
 
-**Command Line:**
-```bash
-python cli.py run-all --role "E-commerce Specialist" --sample-size 1000
-```
+This discounts scores that relied on fabricated evidence, making the final ranking more faithful to what is actually on the resume. Keeps top 10.
 
-**Individual Stages:**
-```bash
-python cli.py run-stage --stage 1 --role "E-commerce Specialist"
-python cli.py run-stage --stage 2 --top-k 50
-python cli.py run-stage --stage 3 --top-k 25
-python cli.py compare --stage1 2 --stage2 3
-python cli.py status
-```
+## Trust Metrics
 
-## 📊 Pipeline Stages
+After all stages complete, two metrics are computed:
 
-### Stage 1: Role Filtering
-Filters dataset by job role  
-Input: 10,000+ resumes → Output: ~1,200 matching role
+**Precision@K** — fraction of the top-K candidates selected by a stage that are ground-truth `select` decisions. Higher is better.
 
-### Stage 2: Baseline Ranking (TF-IDF)
-Keyword-based TF-IDF similarity  
-Input: 1,200 resumes → Output: Top 50
+**Top-K Stability Score (TSS)** — Jaccard overlap between the candidate sets selected by adjacent stages. Measures agreement between consecutive ranking methods. Lower values mean the methods disagree substantially on who the best candidates are.
 
-### Stage 3: Embedding Ranking
-Semantic similarity (all-MiniLM-L6-v2)  
-Input: 50 resumes → Output: Top 25  
-TSS vs Stage 2: typically 0.80+
+Most recent run (E-commerce Specialist, 1000 resumes, all stages):
 
-### Stage 4: Gemini Ranking (Basic)
-LLM-based scoring (1-10)  
-Input: 25 resumes → Output: Top 5
+| Stage | Method | Precision@K |
+|---|---|---|
+| Stage 2 | TF-IDF | 58.0% |
+| Stage 3 | Embeddings | 50.0% |
+| Stage 4 | Gemini base | 70.0% |
+| Stage 5 | Gemini + grounding | 60.0% |
 
-### Stage 5: Improved Gemini (With Grounding)
-LLM with hallucination detection  
-- Enforces skills must be in resume
-- Detects hallucinated claims
-- Penalizes scores for hallucinations
-- Input: 5 resumes → Output: Top 5
+| Transition | TSS |
+|---|---|
+| Stage 2 → Stage 3 | 0.333 |
+| Stage 3 → Stage 4 | 0.143 |
+| Stage 4 → Stage 5 | 0.111 |
 
-## 📈 Trust Metrics
+Low TSS across all transitions means each method selects a substantially different set of candidates — the choice of ranking method has a large effect on who gets hired.
 
-System measures:
-
-- **Top-K Stability (TSS)**: Overlap of top-5 between stages
-- **Hallucination Rate**: % of LLM claims not in resume
-- **Coverage Loss**: Good resumes removed early
-- **Accuracy vs Ground Truth**: Precision/recall against dataset decisions
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 resume-trust-lab/
-├── data/
-├── outputs/          # Stage results (JSON)
 ├── src/
-│   ├── config.py     # Configuration
-│   ├── loader.py     # Data loading
-│   ├── main.py       # Interactive entry point
-│   ├── cli.py        # Command line interface
-│   │
-│   ├── filter_roles.py           # Stage 1
+│   ├── main.py                        # Interactive CLI entry point
+│   ├── config.py                      # Paths, model names, API keys, top-K values
+│   ├── loader.py                      # Dataset and job description loading
+│   ├── filter_roles.py                # Stage 1: role filtering
 │   ├── ranking/
-│   │   ├── baseline_ranker.py   # Stage 2: TF-IDF
-│   │   ├── embedding_ranker.py  # Stage 3: Embeddings
-│   │   ├── gemini_ranker.py     # Stage 4: Gemini base
-│   │   └── improved_gemini_ranker.py  # Stage 5: Gemini+grounding
+│   │   ├── baseline_ranker.py         # Stage 2: TF-IDF
+│   │   ├── embedding_ranker.py        # Stage 3: sentence-transformers
+│   │   ├── gemini_ranker.py           # Stage 4: Gemini API
+│   │   └── improved_gemini_ranker.py  # Stage 5: Gemini + hallucination detection
 │   ├── metrics/
-│   │   ├── trust_metrics.py     # Metric computation
-│   │   └── failure_analysis.py  # Failure detection
+│   │   ├── trust_metrics.py           # Precision@K and TSS computation
+│   │   └── failure_analysis.py        # Failure case analysis
 │   └── evaluation/
-│       ├── experiment_runner.py # Pipeline orchestration
-│       └── compare_stages.py    # Cross-stage comparison
-│
-├── requirements.txt
-├── .env              # API key configuration
-└── README.md
+│       └── experiment_runner.py       # Orchestrates the full pipeline
+├── data/
+│   ├── job_description_ecommerce.txt
+│   └── job_description_software_engineer.txt
+├── outputs/                           # JSON results per stage + metrics.json
+├── .cache/                            # Cached Gemini API responses (MD5-keyed)
+├── .env                               # API keys and dataset path (not committed)
+└── requirements.txt
 ```
 
-## 📊 Output Files
+## Setup
 
-Each stage produces `outputs/stage_N.json` with:
-
-```json
-{
-  "stage": 2,
-  "stage_name": "Baseline Ranking (TF-IDF)",
-  "input_count": 1234,
-  "output_count": 50,
-  "retention_rate": 0.041,
-  "ranked_resumes": [
-    {
-      "rank": 1,
-      "id": 0,
-      "baseline_score": 0.95,
-      "ground_truth_decision": "select"
-    }
-  ]
-}
+```bash
+pip install -r requirements.txt
 ```
 
-## 🔍 Example Insights
-
-### Hallucination Detection (Stage 5)
-
+Create a `.env` file:
 ```
-Resume mentions: Python, SQL, Excel
-Gemini claims: Python, SQL, Kubernetes, Docker
-Hallucinations: 2/4 (50%)
-Score: 8 → 7 (penalized for hallucinations)
+GEMINI_API_KEY=your_key_here
+DATASET_PATH=/path/to/dataset.csv
 ```
 
-### Ranking Comparison
+The dataset CSV should have columns: `Role`, `Resume`, `Decision` (select/reject), `Job_Description`.
 
-```
-Top-5 Stage 2 (TF-IDF): [1, 2, 3, 4, 5]
-Top-5 Stage 3 (Embeddings): [1, 2, 6, 7, 8]
-Overlap: 2/5 = 40%
-Mismatch indicates keyword-semantic disagreement
-```
+A Gemini API key is required for Stages 4 and 5.
 
-## 🔧 Configuration
+## Running
 
-Edit `src/config.py`:
-
-```python
-TOP_K_STAGE_2 = 50    # Keep top N from baseline
-TOP_K_STAGE_3 = 25    # Keep top N from embeddings
-TOP_K_STAGE_4 = 5     # Keep top N from Gemini
-EMBEDDING_MODEL = "all-MiniLM-L6-v2"
-USE_API_CACHE = True  # Cache Gemini responses
+```bash
+cd resume-trust-lab
+python src/main.py
 ```
 
-## 🔑 Using Gemini API
+The interactive prompt asks for:
+- **Role** — job title to screen for (e.g. `E-commerce Specialist`)
+- **Sample size** — how many resumes to load from the dataset (default 1000)
+- **Stages** — comma-separated list like `1,2,3` or `A` for all five
 
-1. Get API key from https://makersuite.google.com/app/apikey
-2. Edit `.env`:
-   ```
-   GEMINI_API_KEY=your_key_here
-   ```
-3. Stages 4-5 will use real Gemini. Without key, they use mock scoring.
+Outputs are written to `outputs/` as JSON files: `stage_1.json` through `stage_5.json` and `metrics.json`.
 
-## 📈 Typical Results
+## Caching
 
-For E-commerce Specialist role:
+Gemini API calls are cached in `.cache/` using an MD5 hash of the (job description + resume) pair. Re-running with the same inputs uses cached responses and skips API calls entirely.
 
-```
-Stage 1: 10,000 → 1,234 resumes (12.3% selected)
-Stage 2: 1,234 → 50 resumes (TF-IDF: 0.35 avg score)
-Stage 3: 50 → 25 resumes (Embedding: 0.62 avg score, TSS: 0.80)
-Stage 4: 25 → 5 resumes (Gemini: 7.2/10 avg score)
-Stage 5: 5 → 5 resumes (Improved: 6.1/10 after hallucination penalty)
+## Key Design Decisions
 
-Metrics:
-- TSS (2→3): 0.80 (good agreement)
-- TSS (4→5): 0.90 (very high agreement)
-- Hallucination rate: 0.15 (15%)
-```
+**Funnel architecture** — Each stage operates on the survivors of the previous stage, reducing the pool progressively so expensive LLM calls are only made on already-promising resumes.
 
-## 📚 Dataset Format
+**Hallucination penalty** — Stage 5 grounds LLM claims against the actual resume text. Skills the model claims to have seen but that don't appear in the text are penalized, making scoring more faithful to the resume.
 
-Uses `/Users/samankgupta/Downloads/TAI Final Project/dataset.csv` with columns:
-- `Role`: Job position
-- `Resume`: Full resume text
-- `Decision`: 'select' or 'reject' (ground truth)
-- `Reason_for_decision`: Why selected/rejected
-- `Job_Description`: Position requirements
+**Rate limiting** — Gemini stages enforce 13 req/min. There is a mandatory 65-second cooldown between Stages 4 and 5 to avoid hitting quota limits across back-to-back runs.
 
-## ⚙️ Troubleshooting
-
-**"GEMINI_API_KEY not set"** - Not an error. System uses mock scoring. Add key to `.env` for real API.
-
-**"Model download in progress"** - First run downloads embedding model (~80MB), cached afterwards.
-
-**"Memory error with large dataset"** - Use `--sample-size` to limit resumes.
-
-**"API rate limit"** - System adds delays between requests. Uses cached responses.
-
-## 🎓 Research Use
-
-This system demonstrates:
-- ✅ Different ranking methods pros/cons
-- ✅ How to measure AI system trustworthiness
-- ✅ LLM hallucination detection in production systems
-- ✅ Accuracy-trust tradeoffs in hiring AI
-- ✅ Multi-stage filtering with ground truth validation
-
-## 📝 Citation
-
-```
-Resume Trust Lab System
-Multi-stage AI Resume Screening & Trust Evaluation
-TAI Final Project - Trustworthy AI
-```
-
----
-
-**Start exploring:** `python src/main.py`
+**Ground truth evaluation** — The dataset includes hiring decisions, enabling objective Precision@K comparison across ranking methods rather than relying on subjective judgment.
