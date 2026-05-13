@@ -28,13 +28,13 @@ FAILURE_ANALYSIS_OUTPUT = OUTPUT_DIR / "failure_analysis.json"
 
 # Ranking parameters
 TOP_K_STAGE_2 = 50  # Keep top 50 from baseline
-TOP_K_STAGE_3 = 25  # Keep top 25 from embedding
+TOP_K_STAGE_3 = 50  # Keep top 50 from embedding
 TOP_K_STAGE_4 = 5   # Keep top 5 from Gemini base
 TOP_K_STAGE_5 = 5   # Keep top 5 from Improved Gemini
 
 # Model names
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
-GEMINI_MODEL_NAME = "gemini-3.1-flash-lite-preview"
+GEMINI_MODEL_NAME = "gemini-3.1-flash-lite"
 
 # API Settings
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")

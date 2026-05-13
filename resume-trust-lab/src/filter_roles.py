@@ -40,7 +40,7 @@ class RoleFilter:
             results['resumes'].append({
                 'id': idx,
                 'role': row['Role'],
-                'resume_preview': row['Resume'][:300],
+                'resume': row['Resume'],
             })
         
         print(f"\n{'='*60}\nSTAGE 1: ROLE FILTERING")

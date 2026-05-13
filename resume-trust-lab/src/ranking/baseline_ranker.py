@@ -27,6 +27,20 @@ class BaselineRanker:
     def run(self, df: pd.DataFrame, job_description: str, top_k: int = TOP_K_STAGE_2) -> Dict:
         """Run Stage 2: Baseline ranking."""
         print(f"\n{'='*60}\nSTAGE 2: BASELINE RANKING (TF-IDF)")
+
+        if df is None or df.empty:
+            results = {
+                'stage': 2,
+                'stage_name': 'Baseline Ranking (TF-IDF)',
+                'parameters': {'method': 'TF-IDF Cosine Similarity', 'top_k': top_k},
+                'input_count': 0,
+                'output_count': 0,
+                'retention_rate': 0.0,
+                'score_stats': {'min': 0.0, 'max': 0.0, 'mean': 0.0},
+                'ranked_resumes': []
+            }
+            print("No resumes available for Stage 2; skipping ranking.")
+            return results, df.copy() if df is not None else pd.DataFrame()
         
         resumes = df['Resume'].tolist()
         scores = self.compute_tfidf_scores(job_description, resumes)
@@ -52,6 +66,7 @@ class BaselineRanker:
                 'rank': idx,
                 'candidate_id': int(row['candidate_id']) if 'candidate_id' in row else idx - 1,
                 'baseline_score': float(row['baseline_score']),
+                'resume': row.get('Resume', ''),
             })
         print(f"Input: {len(df):,} | Output: {len(top_k_df)}")
         

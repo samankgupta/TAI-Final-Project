@@ -28,6 +28,20 @@ class EmbeddingRanker:
     def run(self, df: pd.DataFrame, job_description: str, top_k: int = TOP_K_STAGE_3) -> Dict:
         """Run Stage 3: Embedding-based ranking."""
         print(f"\n{'='*60}\nSTAGE 3: EMBEDDING RANKING")
+
+        if df is None or df.empty:
+            results = {
+                'stage': 3,
+                'stage_name': 'Embedding Ranking',
+                'parameters': {'method': 'Sentence-Transformers', 'top_k': top_k},
+                'input_count': 0,
+                'output_count': 0,
+                'retention_rate': 0.0,
+                'score_stats': {'min': 0.0, 'max': 0.0, 'mean': 0.0},
+                'ranked_resumes': []
+            }
+            print("No resumes available for Stage 3; skipping embedding ranking.")
+            return results, df.copy() if df is not None else pd.DataFrame()
         
         resumes = df['Resume'].tolist()
         print(f"Computing embeddings for {len(resumes)} resumes...")
@@ -54,6 +68,7 @@ class EmbeddingRanker:
                 'rank': idx,
                 'candidate_id': int(row['candidate_id']) if 'candidate_id' in row else idx - 1,
                 'embedding_score': float(row['embedding_score']),
+                'resume': row.get('Resume', ''),
             })
         print(f"Input: {len(df)} | Output: {len(top_k_df)}")
         

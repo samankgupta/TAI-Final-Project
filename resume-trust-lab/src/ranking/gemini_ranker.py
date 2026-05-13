@@ -94,64 +94,111 @@ class GeminiRanker:
         
         self.cache_misses += 1
         
-        # Enforce rate limiting before making API call
+        # Enforce rate limiting before making API call (sliding window)
         self.enforce_rate_limit()
-        self.api_requests += 1
         
-        max_retries = 5
-        for attempt in range(max_retries):
+        max_retries = 4
+        backoff_base = 3
+        for attempt in range(1, max_retries + 1):
             try:
-                prompt = f"Rate this resume match for the job (1-10):\n\nJOB: {job_description[:500]}\n\nRESUME: {resume[:1000]}\n\nScore and brief reason:"
+                # Build a shorter prompt to reduce model processing time
+                prompt = (
+                    f"Rate this resume match for the job (1-100). Return score and one-line reason only:\n\n"
+                    f"JOB: {job_description[:300]}\n\n"
+                    f"RESUME: {resume[:800]}\n\n"
+                    f"Score (1-100) and one-line reason:"
+                )
                 response = self.client.models.generate_content(
                     model=GEMINI_MODEL_NAME,
                     contents=prompt,
                 )
-                text = response.text or ""
+                # record last request time on success and track request timestamp
+                now = time.time()
+                self.last_request_time = now
+                self.request_times.append(now)
+                self.api_requests += 1
 
-                score = 5
+                text = getattr(response, 'text', '') or ''
+
+                # parse integer score between 1 and 100
+                score = None
                 import re
-                match = re.search(r'\b([1-9]|10)\s*/\s*10\b', text)
-                if match:
-                    score = int(match.group(1))
+                # look for patterns like '85/100' or '85 / 100' or '85'
+                m = re.search(r'\b([1-9][0-9]?|100)\s*/\s*100\b', text)
+                if m:
+                    score = int(m.group(1))
                 else:
-                    match = re.search(r'(?:score|rating)[:\s]+([1-9]|10)\b', text, re.IGNORECASE)
-                    if match:
-                        score = int(match.group(1))
+                    m = re.search(r'(?:score|rating)[:\s]+([1-9][0-9]?|100)\b', text, re.IGNORECASE)
+                    if m:
+                        score = int(m.group(1))
                     else:
-                        for part in text.split():
+                        # fallback: find any standalone integer 1-100
+                        for part in re.findall(r'\b\d{1,3}\b', text):
                             try:
-                                num = int(part.strip('.,;:()'))
-                                if 1 <= num <= 10:
+                                num = int(part)
+                                if 1 <= num <= 100:
                                     score = num
                                     break
                             except:
-                                pass
-                score = min(10, max(1, score))
-                result = {'score': score, 'reasoning': text[:150], 'is_mock': False}
+                                continue
+
+                # If model returned 1-10 (common), scale to 1-100
+                if score is None:
+                    # default neutral score
+                    score = 50
+                elif 1 <= score <= 10:
+                    score = score * 10
+                else:
+                    score = min(100, max(1, score))
+
+                result = {'score': score, 'reasoning': text.splitlines()[0][:120] if text else '', 'is_mock': False}
 
                 if USE_API_CACHE:
                     self.save_cached_response(cache_key, result)
 
                 return result
             except Exception as e:
-                if '429' in str(e) and attempt < max_retries - 1:
-                    wait_time = 20 * (attempt + 1)
-                    print(f"  [429 RETRY {attempt+1}/{max_retries-1}] Waiting {wait_time}s...")
+                err_str = str(e)
+                # If transient (rate or service), backoff and retry
+                if (('429' in err_str or 'UNAVAILABLE' in err_str or '503' in err_str)
+                        and attempt < max_retries):
+                    wait_time = backoff_base * attempt
+                    print(f"  [TRANSIENT ERROR] {err_str}. Retry {attempt}/{max_retries} after {wait_time}s...")
                     time.sleep(wait_time)
-                else:
-                    raise RuntimeError(f"Gemini scoring failed: {e}") from e
+                    continue
+                # Non-retriable or out of retries
+                raise RuntimeError(f"Gemini scoring failed: {e}") from e
     
     def run(self, df: pd.DataFrame, job_description: str, top_k: int = TOP_K_STAGE_4) -> Dict:
         """Run Stage 4: Gemini-based ranking."""
         print(f"\n{'='*60}\nSTAGE 4: GEMINI RANKING (BASE)")
         print(f"Scoring {len(df)} resumes... (Rate limit: {self.MAX_REQUESTS_PER_MINUTE} req/min)")
+
+        if df is None or df.empty:
+            results = {
+                'stage': 4,
+                'stage_name': 'Gemini Ranking (Base)',
+                'parameters': {'method': 'Gemini API', 'requested_top_k': top_k, 'rate_limit': f'{self.MAX_REQUESTS_PER_MINUTE}/min'},
+                'cache_stats': {'hits': self.cache_hits, 'misses': self.cache_misses, 'api_requests': self.api_requests},
+                'input_count': 0,
+                'output_count': 0,
+                'retention_rate': 0.0,
+                'score_stats': {'min': 0, 'max': 0, 'mean': 0},
+                'ranked_resumes': []
+            }
+            print("No resumes available for Stage 4; skipping Gemini ranking.")
+            return results, df.copy() if df is not None else pd.DataFrame()
         
         scores = []
         reasonings = []
         for idx, (_, row) in enumerate(df.iterrows()):
-            if (idx + 1) % 5 == 0:
-                print(f"  Scored {idx + 1}/{len(df)}")
-            
+            # Print progress for each resume so user sees current index out of total
+            try:
+                cid = int(row.get('candidate_id')) if 'candidate_id' in row else idx
+            except Exception:
+                cid = idx
+            print(f"  Scoring {idx + 1}/{len(df)} (candidate {cid})")
+
             result = self.rank_resume_with_gemini(job_description, row['Resume'])
             scores.append(result['score'])
             reasonings.append(result.get('reasoning', ''))
@@ -160,28 +207,36 @@ class GeminiRanker:
         ranking_df['gemini_score'] = scores
         ranking_df['gemini_reasoning'] = reasonings
         ranking_df = ranking_df.sort_values('gemini_score', ascending=False).reset_index(drop=True)
-        top_k_df = ranking_df.head(top_k)
-        
+
+        # Prepare results that include ALL scored resumes (e.g., 50), with ranks
+        scored_count = len(ranking_df)
         results = {
             'stage': 4,
             'stage_name': 'Gemini Ranking (Base)',
-            'parameters': {'method': 'Gemini API', 'top_k': top_k, 'rate_limit': f'{self.MAX_REQUESTS_PER_MINUTE}/min'},
+            'parameters': {
+                'method': 'Gemini API',
+                'requested_top_k': top_k,
+                'scored_count': scored_count,
+                'rate_limit': f'{self.MAX_REQUESTS_PER_MINUTE}/min'
+            },
             'cache_stats': {'hits': self.cache_hits, 'misses': self.cache_misses, 'api_requests': self.api_requests},
             'input_count': len(df),
-            'output_count': len(top_k_df),
-            'retention_rate': len(top_k_df) / len(df),
-            'score_stats': {'min': min(scores), 'max': max(scores), 'mean': sum(scores)/len(scores)},
+            'output_count': scored_count,
+            'retention_rate': scored_count / len(df) if len(df) > 0 else 0,
+            'score_stats': {'min': min(scores), 'max': max(scores), 'mean': sum(scores)/len(scores) if scores else 0},
             'ranked_resumes': []
         }
-        
-        for idx, (_, row) in enumerate(top_k_df.iterrows(), 1):
+
+        for idx, (_, row) in enumerate(ranking_df.iterrows(), 1):
             results['ranked_resumes'].append({
                 'rank': idx,
                 'candidate_id': int(row['candidate_id']) if 'candidate_id' in row else idx - 1,
                 'gemini_score': int(row['gemini_score']),
                 'reasoning': row.get('gemini_reasoning', ''),
+                'resume': row.get('Resume', ''),
+                'job_description': job_description,
             })
-        print(f"Input: {len(df)} | Output: {len(top_k_df)}")
+        print(f"Input: {len(df)} | Scored: {scored_count}")
         print(f"API Requests: {self.api_requests} | Cache Hits: {self.cache_hits} | Cache Misses: {self.cache_misses}")
         
         return results, ranking_df

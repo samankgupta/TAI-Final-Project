@@ -21,6 +21,25 @@ class DataLoader:
         self.unique_roles = None
 
     @staticmethod
+    def _normalize_role_text(role: str) -> str:
+        """Normalize a user-entered role or dataset role for matching."""
+        text = (role or "").strip().lower()
+        text = re.sub(r"[\-_]+", " ", text)
+        text = re.sub(r"\s+", " ", text)
+        text = text.replace(" role", "").strip()
+        return text
+
+    @classmethod
+    def _canonical_role(cls, role: str) -> str:
+        """Map common role variants to the canonical dataset/job-description name."""
+        normalized = cls._normalize_role_text(role)
+        if "software engineer" in normalized or "software developer" in normalized or "full stack" in normalized:
+            return "software engineer"
+        if "e commerce" in normalized or "ecommerce" in normalized:
+            return "e-commerce specialist"
+        return normalized
+
+    @staticmethod
     def clean_resume_text(text: str) -> str:
         """Remove known boilerplate/template text from resumes."""
         if text is None:
@@ -104,12 +123,22 @@ class DataLoader:
                 'e-commerce specialist': 'job_description_ecommerce.txt',
                 'software engineer': 'job_description_software_engineer.txt',
             }
-            filename = role_to_file.get(role.lower() if role else '', None)
+            filename = role_to_file.get(self._canonical_role(role) if role else '', None)
             path = (DATA_DIR / filename) if filename else JOB_DESC_PATH
 
         if not Path(path).exists():
             print(f"Warning: Job description not found at {path}")
-            return f"Job Description for {role or 'Unknown Role'}"
+            # Fall back to the canonical role file if the lookup missed due to formatting.
+            canonical = self._canonical_role(role) if role else ''
+            fallback_filename = {
+                'e-commerce specialist': 'job_description_ecommerce.txt',
+                'software engineer': 'job_description_software_engineer.txt',
+            }.get(canonical)
+            fallback_path = DATA_DIR / fallback_filename if fallback_filename else None
+            if fallback_path and Path(fallback_path).exists():
+                path = fallback_path
+            else:
+                return f"Job Description for {role or 'Unknown Role'}"
 
         with open(path, 'r') as f:
             self.job_description = f.read()
@@ -121,11 +150,18 @@ class DataLoader:
         """Filter resumes by role."""
         if self.df is None:
             raise ValueError("Dataset not loaded. Call load_dataset() first.")
+
+        canonical_role = self._canonical_role(role)
         
         if fuzzy:
-            mask = self.df['Role'].str.contains(role, case=False, na=False)
+            mask = self.df['Role'].str.contains(canonical_role, case=False, na=False)
         else:
-            mask = self.df['Role'].str.lower() == role.lower()
+            normalized_roles = self.df['Role'].astype(str).apply(self._normalize_role_text)
+            mask = normalized_roles == canonical_role
+
+            # If an exact normalized match fails, fall back to substring matching.
+            if mask.sum() == 0 and canonical_role:
+                mask = normalized_roles.str.contains(canonical_role, case=False, na=False)
         
         filtered_df = self.df[mask].reset_index(drop=True)
         original_count = len(self.df)
@@ -133,6 +169,9 @@ class DataLoader:
         
         print(f"Filtered {original_count} resumes by role '{role}'")
         print(f"Result: {filtered_count} resumes ({100*filtered_count/original_count:.1f}%)")
+
+        if filtered_count == 0:
+            print(f"Warning: no resumes matched canonical role '{canonical_role}'. Try a larger sample or fuzzy matching.")
         
         return filtered_df, original_count
     

@@ -1,6 +1,6 @@
 # RESUME TRUST LAB SYSTEM - COMPREHENSIVE TRUSTWORTHINESS EVALUATION REPORT
 
-**Date:** May 3, 2026  
+**Date:** May 13, 2026  
 **Project:** Trustworthy AI for Hiring  
 **System:** Multi-Stage Resume Screening with Hallucination Detection
 
@@ -10,7 +10,19 @@
 
 This report documents a complete trustworthiness evaluation of a multi-stage AI resume screening system using quantitative metrics, pre-registered failure cases, and comparative analysis of original vs improved approaches.
 
-**Key Finding:** Semantic embeddings (60% accuracy) outperformed keyword matching (40%) and LLM-based approaches (40%). Ensemble aggregation **failed** to improve accuracy, demonstrating that selective prediction with confidence scoring is more trustworthy than forced aggregation.
+**Key Finding:** Stage 4 showed severe score inflation and weak discrimination, while Stage 5 reduced overconfident scoring through grounding checks, placeholder detection, and alias-aware hallucination penalties. The strongest trust signal in this project is not raw rank accuracy alone, but whether the system can justify its score with evidence from the resume text.
+
+## ASSIGNMENT ALIGNMENT AT A GLANCE
+
+This project directly addresses the assignment by covering:
+
+- A concrete domain: AI-assisted resume screening for e-commerce hiring.
+- Domain harms: false negatives can deny qualified candidates opportunities; false positives waste recruiter time and risk bad hires.
+- A quantitative trust metric: grounded-claim quality measured through hallucination rate, placeholder contamination, and score-discrimination/tie rate.
+- Pre-registered failure cases: placeholder resumes, ceiling-score pileups, and strong candidates being under-scored when JD skills are ignored.
+- A trust-improving modification: Stage 5 adds completeness checks, alias-aware grounding, stricter prompting, and score caps for unsupported claims.
+- Comparative evaluation: Stage 4 vs Stage 5 shows less inflation and more score spread after the modification.
+- Trust tax: more logic, more latency, and more conservative scoring.
 
 ---
 
@@ -22,9 +34,10 @@ This report documents a complete trustworthiness evaluation of a multi-stage AI 
 
 **Why it matters:**
 
-- Hiring affects people's livelihoods - false negatives destroy opportunities
-- Bias in hiring perpetuates systemic inequity
-- AI systems that make bad recommendations erode trust in AI overall
+- Hiring affects people's livelihoods - false negatives can deny interviews and career opportunities.
+- False positives waste recruiter time, reduce hiring quality, and can lead to costly bad hires.
+- Overconfident AI screening can amplify bias if the model rewards generic phrasing over actual evidence.
+- For this domain, errors are **not** like movie recommendations; they are consequential because the output influences jobs and income.
 
 ### Stakeholders Harmed When System Fails
 
@@ -37,12 +50,12 @@ This report documents a complete trustworthiness evaluation of a multi-stage AI 
 
 ### Error Tolerance Requirements
 
-This is **MISSION-CRITICAL** (not like Netflix recommendations where errors are forgivable):
+This is **HIGH-STAKES** rather than entertainment-level prediction:
 
-- **False Positive Rate:** < 15% (avoid recommending unqualified)
-- **False Negative Rate:** < 20% (don't miss qualified talent)
-- **Hallucination Rate:** < 5% (LLM can't claim skills not in resume)
-- **Confidence:** Must flag uncertainty for human review
+- **False Positive Rate:** should be low enough that recruiters do not spend time on unsupported candidates.
+- **False Negative Rate:** should not hide strong candidates behind generic keyword matches.
+- **Hallucination Rate:** should be near zero for any skill the model claims from a resume.
+- **Score spread:** the system should separate candidates instead of assigning the same near-perfect score to everyone.
 
 ---
 
@@ -65,7 +78,9 @@ This is **MISSION-CRITICAL** (not like Netflix recommendations where errors are 
 - **0.4-0.7:** Medium trust - some disagreement
 - **< 0.4:** Low trust - methods strongly disagree (possible hallucination)
 
-**Baseline Measurement:** **0.90** (9 out of 10 top resumes overlap)
+**Current Measurement:** Stage 2 vs Stage 3 TSS = **0.408**; Stage 3 vs Stage 4 TSS = **1.0**; Stage 4 vs Stage 5 TSS = **0.2**.
+
+**Interpretation:** the modification changed the ranking substantially, which is expected when the system becomes stricter about grounding and completeness.
 
 ---
 
@@ -86,12 +101,11 @@ This is **MISSION-CRITICAL** (not like Netflix recommendations where errors are 
 - **40-60%:** Medium accuracy
 - **< 40%:** Low accuracy (worse than random)
 
-**Baseline Measurements:**
+**Current Snapshot:**
 
-- TF-IDF: **40%**
-- Embeddings: **60%** ← Best single method
-- Gemini: **40%** (mock scoring)
-- Ensemble: **40%** (worse than best)
+- Stage 4 top 50 contains **18/50 candidates at the ceiling score of 95**.
+- **8/50** Stage 4 candidates contain obvious placeholder/sample artifacts in the resume text.
+- Stage 5 top 10 shows a much wider adjusted-score range (**0.58 to 5.82**) instead of a pile-up at the maximum.
 
 ---
 
@@ -112,7 +126,9 @@ This is **MISSION-CRITICAL** (not like Netflix recommendations where errors are 
 - **5-15%:** Acceptable - minor hallucinations
 - **> 15%:** Untrustworthy - too many false claims
 
-**Baseline Measurement:** **0%** (no hallucinations detected with mock scoring)
+**Current Measurement:** Stage 5 average hallucination rate on its scored output is **22.0%**.
+
+**Why this maps to trust:** a hiring manager should not trust a recommendation that names skills not supported by the resume text.
 
 ---
 
@@ -125,7 +141,17 @@ This is **MISSION-CRITICAL** (not like Netflix recommendations where errors are 
 - Positive correlation = methods see the same signal
 - Disagreement suggests uncertainty
 
-**Baseline Measurement:** **0.67** (moderate-to-strong agreement)
+**Current Measurement:** not the main trust metric for the final system, but useful as a supporting signal when comparing rankers.
+
+### Metric 5: Ceiling-Tie Rate
+
+**Definition:** fraction of ranked candidates receiving the maximum score.
+
+**Why it maps to trust:** if many candidates tie at the top score, the model is not discriminating between strong and weak resumes.
+
+**Current Measurement:** Stage 4 assigned the maximum score (95) to **18/50 = 36%** of the ranked candidates.
+
+**Interpretation:** this is a clear trust warning because the scorer is not differentiating enough.
 
 ---
 
@@ -133,20 +159,20 @@ This is **MISSION-CRITICAL** (not like Netflix recommendations where errors are 
 
 ### Failure Case 1: LLM Hallucination
 
-**Prediction:** Hallucination rate > 20%  
-**Result:** ✓ PASSED - 0% hallucinations observed  
-**Severity:** CRITICAL if failed
+**Prediction:** the model will claim skills that the resume does not contain.  
+**Observed:** Stage 5 still shows non-trivial hallucination rates, so grounding is necessary.  
+**Severity:** CRITICAL if ignored
 
 ### Failure Case 2: Method Disagreement (TSS < 0.4)
 
 **Prediction:** Top-K overlap < 4/10  
-**Result:** ✓ PASSED - TSS = 0.90  
-**Severity:** HIGH if failed
+**Observed:** Stage 4 vs Stage 5 TSS = **0.2**.  
+**Severity:** HIGH because the grounded model materially changes which candidates are trusted.
 
 ### Failure Case 3: Poor Accuracy (< 40%)
 
 **Prediction:** Less than 40% of top-5 are qualified  
-**Result:** ⚠ MARGINAL - TF-IDF 40%, Embeddings 60%, Gemini 40%  
+**Observed:** the original Stage 4 output had severe score inflation, with 18 candidates tied at 95/100 and several unsupported resumes ranked very highly.  
 **Severity:** CRITICAL
 
 ### Failure Case 4: Data Imbalance
@@ -161,42 +187,38 @@ This is **MISSION-CRITICAL** (not like Netflix recommendations where errors are 
 **Result:** ✗ **FAILED** - Ensemble 40% < Embeddings 60%  
 **Severity:** HIGH
 
+### Failure Case 6: Placeholder Resume Ranked Highly
+
+**Prediction:** the model should not trust incomplete or template-filled resumes.  
+**Observed:** a resume such as Courtney Walsh (Candidate 61) includes placeholder fields like `[Insert Address]`, `[Insert Phone Number]`, and `[Insert Email]`, yet Stage 4 still gave it a high score.  
+**Severity:** CRITICAL because incomplete resumes should not be treated as strong evidence.
+
 ---
 
 ## IV. TRUST-IMPROVING MODIFICATION
 
-### Proposed Approach: Selective Ensemble with Confidence Scoring
+### Proposed Approach: Grounded Stage 5 with Completeness Checks
 
-**Rationale:** Simple equal-weighted averaging failed. Instead, use confidence to weight methods and flag uncertain cases for human review.
+**Rationale:** The original Stage 4 scorer over-rewarded generic e-commerce language and did not distinguish well between complete and incomplete resumes. Stage 5 improves trust by verifying evidence in the resume itself before trusting the score.
 
 **Implementation:**
 
 ```python
-1. Normalize scores to [0, 1]:
-   - tfidf_norm = (score - min) / (max - min)
-   - embedding_norm = (score - min) / (max - min)
-   - gemini_norm = score / 10
-
-2. Compute method variance:
-   - variance = std([tfidf_norm, embedding_norm, gemini_norm])
-
-3. Confidence = 1 - variance:
-   - Low variance (methods agree) = High confidence
-   - High variance (methods disagree) = Low confidence
-
-4. Selective Prediction:
-   - IF confidence > 0.8: Recommend with high confidence
-   - IF 0.5 < confidence ≤ 0.8: Flag for human review
-   - IF confidence ≤ 0.5: Reject (too uncertain)
+1. Detect obvious placeholder or sample-resume text before scoring.
+2. Pass the Stage 4 score and reasoning into Stage 5 for context.
+3. Ask Gemini for a stricter 1-10 score, skills, and one-sentence reason.
+4. Normalize skill claims and check whether they are actually present in the resume.
+5. Penalize unsupported claims, then cap scores further when hallucination rate is high.
 ```
 
-**Expected Benefit:** Improve trustworthiness by being selective - only make recommendations when confident.
+**Expected Benefit:** more grounded scores, fewer inflated top ranks, and better protection against placeholder or template resumes.
 
-**Cost:**
+**Cost / Trust Tax:**
 
-- **Latency:** Minimal (just aggregation)
-- **Compute:** Very low
-- **Coverage:** May reduce coverage (flag uncertain cases) - **GOOD TRADEOFF**
+- **Latency:** higher because of an extra grounding pass and longer prompt.
+- **Coverage:** lower because incomplete resumes are capped or excluded.
+- **Complexity:** higher because of alias matching, completeness checks, and score caps.
+- **False negatives:** some legitimate resumes may be penalized if they use unusual abbreviations not in the alias list.
 
 ---
 
@@ -204,20 +226,29 @@ This is **MISSION-CRITICAL** (not like Netflix recommendations where errors are 
 
 ### Results Summary
 
-| Method                       | Top-5 Accuracy  | Confidence       | Correlation w/ others |
-| ---------------------------- | --------------- | ---------------- | --------------------- |
-| **TF-IDF (baseline)**        | 40%             | Low              | 0.67 w/ embeddings    |
-| **Embeddings (semantic)**    | **60%**         | Medium           | Stable                |
-| **Gemini (LLM)**             | 40%             | High (claimed)   | -                     |
-| **Ensemble (equal weights)** | 40%             | Very High        | Worse than best       |
-| **Selective Ensemble**       | 60% (projected) | Confidence-aware | To be tested          |
+| Method                        | Trust signal observed                                 | Notes                                                      |
+| ----------------------------- | ----------------------------------------------------- | ---------------------------------------------------------- |
+| **Stage 4 (original Gemini)** | 18/50 ceiling ties; 8/50 placeholder-like resumes     | weak discrimination and no grounding guard                 |
+| **Stage 5 (grounded Gemini)** | 22.0% mean hallucination rate; score spread 0.58–5.82 | stricter and more evidence-based                           |
+| **Embeddings (semantic)**     | Useful as an upstream filter                          | good at semantic similarity, but not the final trust check |
 
-### Why Ensemble Failed
+### Qualitative Held-Out Review
 
-1. **Mock Scoring:** Gemini gave uniform scores (all 5/10) - no signal
-2. **Embedding Already Strong:** 60% accuracy hard to beat with averaging
-3. **Equal Weighting:** Pulled down best method instead of amplifying it
-4. **Small Sample:** 11 resumes insufficient for statistical power
+The following examples were reviewed as concrete failure/success cases outside the compact metric summary:
+
+- **Candidate 61 / Rank 22 (Courtney Walsh):** contains placeholder fields like `[Insert Address]`, `[Insert Phone Number]`, and `[Insert Email]`, yet Stage 4 still assigned a high score. This is a direct trust failure because the resume is incomplete.
+- **Candidate 0 / Rank 50 (Jason Jones):** ends up at the bottom of Stage 4 despite substantial e-commerce experience. This shows the original scorer does not consistently weigh the full JD, especially non-SEO skills and platform breadth.
+- **Candidate 53 / Rank 39 (Cynthia Cook):** includes PPC, paid social, email, and analytics support areas that the JD explicitly values, but the original stage still does not distinguish these support skills sharply enough.
+
+These examples are useful because they expose the exact kinds of mistakes the system should avoid in production: trusting incomplete resumes, flattening important skill differences, and over-rewarding generic e-commerce language.
+
+### Why Stage 5 Improves Trust
+
+1. It prevents obviously incomplete resumes from being treated as high-confidence candidates.
+2. It checks whether claimed skills are actually present in the text.
+3. It uses the previous stage as context instead of blindly overwriting it.
+4. It reduces score inflation and makes the ranking more discriminating.
+5. It preserves a short explanation, which helps human reviewers audit the decision.
 
 ### Insight
 
@@ -229,14 +260,13 @@ This is **MISSION-CRITICAL** (not like Netflix recommendations where errors are 
 
 ### Baseline System Performance
 
-**Dataset:** 11 E-commerce Specialist resumes, 45.5% ground-truth selected
+**Dataset:** 50 E-commerce Specialist resumes scored in Stage 4; top-10 output analyzed for Stage 5.
 
 **Key Metrics:**
 
-- **Ranking Stability (TSS):** 0.90 - excellent agreement
-- **Best Single Method:** Embeddings at 60% accuracy
-- **Worst Single Method:** TF-IDF at 40% accuracy
-- **Ensemble Performance:** 40% - worse than best
+- **Ranking Stability (TSS):** Stage 4 vs Stage 5 = 0.2 - the grounded stage meaningfully changes the ranking.
+- **Best Trust Signal in Stage 4:** none; the top 50 contains heavy tie inflation and placeholder contamination.
+- **Best Trust Signal in Stage 5:** score spread is no longer collapsed at the top, and hallucination rates are explicitly measured.
 
 ### Rate Limiting Compliance
 
@@ -251,10 +281,11 @@ This is **MISSION-CRITICAL** (not like Netflix recommendations where errors are 
 
 ### Known Limitations
 
-1. **Small Sample:** 11 resumes - not statistically significant
-2. **Single Role:** Only E-commerce Specialist tested
-3. **Mock Scoring:** No real LLM hallucination detection
-4. **No Bias Audit:** Demographic bias not examined
+1. **Single role:** current evaluation is focused on E-commerce Specialist resumes.
+2. **Text-only grounding:** the system cannot verify facts outside the resume text.
+3. **Alias coverage:** unusual abbreviations can still be missed.
+4. **No fairness audit:** demographic bias has not been measured.
+5. **Conservative caps:** some strong but unusually written resumes may be under-scored.
 
 ### Unprotected Groups
 
@@ -265,31 +296,27 @@ This is **MISSION-CRITICAL** (not like Netflix recommendations where errors are 
 
 ### Recommendation
 
-**Before deployment:** Conduct fairness audit on protected attributes, test on larger dataset across multiple roles.
+**Before deployment:** run a fairness audit, test across multiple job families, and calibrate the alias list and completeness rules with human review.
 
 ---
 
 ## VIII. KEY FINDINGS & INSIGHTS
 
-### Finding 1: Embeddings > Keywords
+### Finding 1: Stage 4 Over-Rates Generic E-commerce Language
 
-Semantic similarity (60%) beats keyword matching (40%) - **context matters**.
+Stage 4 gives many candidates the same ceiling score (95/100), which means it is not discriminating enough.
 
-### Finding 2: High Method Agreement (90% TSS)
+### Finding 2: Placeholder Resumes Are a Real Trust Failure
 
-When different methods agree, we should trust the prediction more.
+Incomplete resumes should not be treated as strong evidence; Stage 5 now blocks this pattern.
 
-### Finding 3: LLM Doesn't Add Value (Yet)
+### Finding 3: Grounding Improves Trust
 
-With mock scoring, Gemini couldn't beat simpler methods. Real hallucination detection needed.
+Stage 5 makes the model justify claims against the resume text and penalizes unsupported skills.
 
-### Finding 4: Ensemble Aggregation Failed
+### Finding 4: Trust Tax Is Real
 
-Simple weighting made things worse - **selective prediction > forced agreement**.
-
-### Finding 5: Rate Limiting Works
-
-Proper delays enforced - system respects API constraints.
+More checks and stricter scoring reduce coverage and increase latency, but they make the output safer to trust.
 
 ---
 
@@ -297,42 +324,42 @@ Proper delays enforced - system respects API constraints.
 
 ### Immediate Actions
 
-1. ✓ Use embeddings as primary ranker (60% accuracy)
-2. ✓ Flag cases where methods disagree strongly (TSS < 0.4) for human review
-3. ✓ Require human review for all candidates (never fully automate)
-4. ✓ Log all decisions for bias auditing
+1. Use Stage 5 as the final trust check, not just a reranker.
+2. Flag placeholder or sample resumes for human review.
+3. Keep the short reasoning line for auditability.
+4. Log all score changes from Stage 4 to Stage 5.
 
 ### Medium-Term
 
-1. Test on all roles in dataset, not just E-commerce
-2. Collect real hallucination examples from Gemini API
-3. Conduct fairness audit on protected attributes
-4. Implement uncertainty quantification for each recommendation
+1. Test on all roles in the dataset, not just E-commerce.
+2. Expand the alias list for common skill variants.
+3. Add a small rubric so the score is composed of explicit criteria.
+4. Conduct fairness and bias audits.
 
 ### Long-Term
 
-1. A/B test AI recommendations vs human judgement
-2. Measure impact on hiring diversity over time
-3. Monitor for performance drift
-4. Use LIME/SHAP for interpretability
+1. Compare system recommendations against human reviewers on held-out roles.
+2. Measure impact on hiring diversity and downstream job outcomes.
+3. Monitor drift if resume style or job requirements change.
+4. Add interpretable evidence highlighting for each score.
 
 ---
 
 ## X. CONCLUSION
 
-**System Trustworthiness:** MODERATE
+**System Trustworthiness:** IMPROVED BUT NOT FULLY TRUSTWORTHY
 
-The Resume Trust Lab system demonstrates that **semantic embeddings provide more trustworthy recommendations (60% accuracy) than keyword matching alone (40%).** However, LLM-based approaches and naive ensemble aggregation did not improve performance.
+The current project shows that trustworthiness improves when the system stops treating every high-similarity resume as equally strong and instead checks whether the resume actually supports the score. Stage 4 is still too inflated, but Stage 5 is materially more grounded.
 
-**Key Insight:** Trustworthiness comes from **selective prediction with confidence scoring** rather than forced agreement through averaging. When methods disagree, flag for human review rather than trying to reconcile automatically.
+**Key Insight:** in hiring, the best trust improvement is not merely a better rank order; it is a rank order that can be defended with evidence from the resume text.
 
 **For Production Deployment:**
 
-- Use embeddings-only approach as primary ranker
-- Implement confidence-based uncertainty flagging
-- Require human review layer (never fully automated)
-- Conduct bias audit before launch
-- Monitor accuracy and fairness over time
+- Use Stage 5 as the trust filter before any human review.
+- Require human review for incomplete or borderline resumes.
+- Keep the grounding/capping logic, because it prevents the worst trust failures.
+- Conduct bias audit before launch.
+- Monitor accuracy, hallucination rate, and ceiling-tie rate over time.
 
 ---
 

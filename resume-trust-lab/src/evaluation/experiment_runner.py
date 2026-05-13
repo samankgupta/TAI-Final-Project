@@ -6,7 +6,7 @@ from typing import Optional
 import pandas as pd
 from pathlib import Path
 
-from config import STAGE_1_OUTPUT, STAGE_2_OUTPUT, STAGE_3_OUTPUT, STAGE_4_OUTPUT, STAGE_5_OUTPUT
+from config import STAGE_1_OUTPUT, STAGE_2_OUTPUT, STAGE_3_OUTPUT, STAGE_4_OUTPUT, STAGE_5_OUTPUT, TOP_K_STAGE_2, TOP_K_STAGE_3, TOP_K_STAGE_4
 from loader import DataLoader
 from filter_roles import RoleFilter
 from ranking.baseline_ranker import BaselineRanker
@@ -52,7 +52,7 @@ class ExperimentRunner:
         self.df = filtered_df
         self.df['candidate_id'] = range(len(self.df))
     
-    def run_stage_2(self, top_k: int = 50) -> None:
+    def run_stage_2(self, top_k: int = TOP_K_STAGE_2) -> None:
         """Run Stage 2."""
         if self.df is None:
             raise ValueError("Must run Stage 1 first")
@@ -65,7 +65,7 @@ class ExperimentRunner:
         self.stage_results['stage_2'] = results
         self.ranked_dfs['stage_2'] = ranked_df
     
-    def run_stage_3(self, top_k: int = 30) -> None:
+    def run_stage_3(self, top_k: int = TOP_K_STAGE_3) -> None:
         """Run Stage 3."""
         if self.df is None:
             raise ValueError("Must run Stage 1 first")
@@ -79,7 +79,7 @@ class ExperimentRunner:
         self.stage_results['stage_3'] = results
         self.ranked_dfs['stage_3'] = ranked_df
     
-    def run_stage_4(self, top_k: int = 10) -> None:
+    def run_stage_4(self, top_k: int = TOP_K_STAGE_4) -> None:
         """Run Stage 4."""
         if self.job_description is None:
             self.load_job_description()
@@ -117,10 +117,22 @@ class ExperimentRunner:
         self.load_job_description()
         if 2 in stages:
             self.run_stage_2()
+            if self.stage_results.get('stage_2', {}).get('output_count', 0) == 0:
+                print("Stage 2 produced no candidates; skipping later stages.")
+                print("\n" + "="*70 + "\nALL STAGES COMPLETED\n" + "="*70)
+                return
         if 3 in stages:
             self.run_stage_3()
+            if self.stage_results.get('stage_3', {}).get('output_count', 0) == 0:
+                print("Stage 3 produced no candidates; skipping later stages.")
+                print("\n" + "="*70 + "\nALL STAGES COMPLETED\n" + "="*70)
+                return
         if 4 in stages:
             self.run_stage_4()
+            if self.stage_results.get('stage_4', {}).get('output_count', 0) == 0:
+                print("Stage 4 produced no candidates; skipping stage 5.")
+                print("\n" + "="*70 + "\nALL STAGES COMPLETED\n" + "="*70)
+                return
         if 5 in stages:
             if 4 in stages:
                 print("\n[Cooldown] Waiting 65s for Gemini rate limit window to reset...")
